@@ -24,7 +24,7 @@ const AnalysisPanel: React.FC<QueryResponseProps> = ({ response, isLoading, erro
     const acts = payload.acts ?? {};
     const actEntries = Object.entries(acts);
 
-    if (actEntries.length === 0) {
+    if (actEntries.length === 0 && !payload.description) {
       return <Text style={styles.plainText}>No response data available.</Text>;
     }
 
