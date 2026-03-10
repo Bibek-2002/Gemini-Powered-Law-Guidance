@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { STATUTE_LIBRARY, type StatuteBrief } from '../dataLayer/statuteDecks';
+import { STATUTE_REFERENCE_LIBRARY, type StatuteDeckBrief } from '../legalData/statuteLibrary';
 
-const DEFAULT_TAB = STATUTE_LIBRARY[0]?.code ?? '';
+const DEFAULT_TAB = STATUTE_REFERENCE_LIBRARY[0]?.code ?? '';
 
 const normalize = (value: string): string => value.trim().toLowerCase();
 
@@ -11,7 +11,7 @@ const StatuteExplorerScreen: React.FC = () => {
   const [query, setQuery] = useState<string>('');
 
   const activeBrief = useMemo(
-    () => STATUTE_LIBRARY.find((entry) => entry.code === activeCode) ?? STATUTE_LIBRARY[0],
+    () => STATUTE_REFERENCE_LIBRARY.find((entry) => entry.code === activeCode) ?? STATUTE_REFERENCE_LIBRARY[0],
     [activeCode]
   );
 
@@ -50,7 +50,7 @@ const StatuteExplorerScreen: React.FC = () => {
       </View>
 
       <View style={styles.tabWrap}>
-        {STATUTE_LIBRARY.map((entry) => {
+        {STATUTE_REFERENCE_LIBRARY.map((entry) => {
           const selected = entry.code === activeCode;
           return (
             <TouchableOpacity
@@ -270,3 +270,5 @@ const styles = StyleSheet.create({
 });
 
 export default StatuteExplorerScreen;
+
+

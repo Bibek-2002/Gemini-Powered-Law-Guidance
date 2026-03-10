@@ -14,7 +14,7 @@ const AppDownloadScreen: React.FC = () => {
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <LinearGradient colors={['#0A0F1D', '#17345E', '#0B4A6F']} style={styles.hero}>
         <Text style={styles.heroLabel}>Install</Text>
-        <Text style={styles.heroTitle}>Get Gemini-Powered-Law-Guidance</Text>
+        <Text style={styles.heroTitle}>Get Gemini Powered Law Assistant</Text>
         <Text style={styles.heroSubtitle}>
           Download the latest Android package for full access to all legal workflow modules.
         </Text>
@@ -131,4 +131,5 @@ const styles = StyleSheet.create({
 });
 
 export default AppDownloadScreen;
+
 

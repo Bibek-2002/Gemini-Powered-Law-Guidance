@@ -1,15 +1,15 @@
-﻿import React from 'react';
+import React from 'react';
 import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import TagList from './CaseTagChips';
 import StatusBadge from './CaseStatusPill';
-import { CaseRecord } from '../../domain/caseModels';
+import { MatterRecord } from '../../entities/caseTypes';
 
 interface CaseModalProps {
   visible: boolean;
-  caseItem: CaseRecord | null;
+  caseItem: MatterRecord | null;
   isEditing: boolean;
-  editedData: Partial<CaseRecord>;
+  editedData: Partial<MatterRecord>;
   onClose: () => void;
   onEditToggle: () => void;
   onSave: () => void;
@@ -278,4 +278,6 @@ const styles = StyleSheet.create({
 });
 
 export default VaultCaseSheet;
+
+
 

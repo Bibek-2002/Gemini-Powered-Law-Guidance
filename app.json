@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "Gemini-Powered-Law-Guidance Public",
-    "slug": "gemini-powered-law-guidance-public",
+    "name": "Gemini Powered Law Assistant",
+    "slug": "gemini-powered-law-assistant-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "scheme": "gemini-powered-law-guidance-public",
+    "scheme": "gemini-powered-law-assistant",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -15,11 +15,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.bibek.geminipoweredlawguidancepublic",
+      "bundleIdentifier": "com.geminipoweredlawassistant.mobile",
       "buildNumber": "1.0.0"
     },
     "android": {
-      "package": "com.bibek.geminipoweredlawguidancepublic",
+      "package": "com.geminipoweredlawassistant.mobile",
       "permissions": [
         "android.permission.INTERNET",
         "android.permission.ACCESS_NETWORK_STATE",

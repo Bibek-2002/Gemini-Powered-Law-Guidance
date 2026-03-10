@@ -1,6 +1,6 @@
-export const LOCAL_CASES_KEY = 'local_cases';
+export const MATTER_LEDGER_STORAGE_KEY = 'matter_ledger_records';
 
-export interface CaseRecord {
+export interface MatterRecord {
   id: number;
   caseHeading: string;
   query: string;
@@ -10,10 +10,11 @@ export interface CaseRecord {
   tags?: string;
 }
 
-export interface DraftCaseRecord {
+export interface DraftMatterRecord {
   caseHeading: string;
   userQuery: string;
   tags: string;
   description: string;
   caseStatus: string;
 }
+

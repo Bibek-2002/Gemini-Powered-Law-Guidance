@@ -1,17 +1,17 @@
-﻿import React from 'react';
+import React from 'react';
 import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { DraftCaseRecord } from '../../domain/caseModels';
+import { DraftMatterRecord } from '../../entities/caseTypes';
 
 interface CaseModalProps {
   visible: boolean;
-  caseDetails: DraftCaseRecord;
+  caseDetails: DraftMatterRecord;
   onClose: () => void;
   onSave: () => void;
   onInputChange: (key: string, value: string) => void;
 }
 
-const formFields: Array<{ label: string; key: keyof DraftCaseRecord; multiline?: boolean }> = [
+const formFields: Array<{ label: string; key: keyof DraftMatterRecord; multiline?: boolean }> = [
   { label: 'Case Heading', key: 'caseHeading' },
   { label: 'User Query', key: 'userQuery' },
   { label: 'Tags', key: 'tags' },
@@ -145,4 +145,6 @@ const styles = StyleSheet.create({
 });
 
 export default DraftCaseSheet;
+
+
 

@@ -1,21 +1,13 @@
-# Gemini-Powered-Law-Guidance Public
+# Gemini Powered Law Assistant
 
-Gemini-Powered-Law-Guidance Public is a React Native (Expo) mobile application for legal workflow support. It combines AI-assisted legal analysis, a local case ledger, statute quick-reference decks, and incident reporting utilities in one mobile workspace.
-
-## Product Goals
-
-- Provide fast first-pass legal issue analysis with structured AI output.
-- Keep case notes and saved responses available on-device for continuity.
-- Offer searchable statute decks for rapid section lookup during drafting.
-- Generate incident templates and printable reports from the same workflow.
-- Keep module boundaries clear so future expansion remains maintainable.
+Gemini Powered Law Assistant is a React Native (Expo) mobile app for legal workflow support. It combines AI-assisted legal analysis, a local matter ledger, statute quick-reference decks, and incident reporting utilities in one mobile workspace.
 
 ## Feature Modules
 
 - `Command Center`: home launchpad and workflow routing.
-- `Research Desk`: Gemini query analysis and structured legal summary generation.
-- `Docket Vault`: save, review, and edit local case records.
-- `Statute Notebook`: tabbed searchable statute section reference decks.
+- `Research Desk`: AI query analysis and structured legal summary generation.
+- `Docket Vault`: save, review, and edit local matter records.
+- `Statute Notebook`: searchable statute section reference decks.
 - `Incident Studio`: guided intake form and PDF export.
 - `Incident Template`: plain text incident template export.
 - `Source Archive`: browse reference documents.
@@ -27,7 +19,7 @@ Gemini-Powered-Law-Guidance Public is a React Native (Expo) mobile application f
 - TypeScript
 - React Navigation (native stack)
 - AsyncStorage
-- Axios
+- Native `fetch` for model API calls
 
 ## Directory Map
 
@@ -36,16 +28,15 @@ RootNavigator.tsx
 appRoutes.ts
 views/
 uiBlocks/
-integrations/
-domain/
-dataLayer/
+services/
+entities/
+legalData/
 assets/
-images/
 ```
 
-## Statute Data Layer (JSON)
+## Statute Library JSON
 
-The statute decks are maintained as JSON files in `dataLayer/statuteDecks/` and normalized through `dataLayer/statuteDecks/index.ts`.
+Statute decks are stored in `legalData/statuteLibrary/` and normalized through `legalData/statuteLibrary/index.ts`.
 
 - `criminal_offence_digest.json`
 - `procedure_track_bnss.json`
@@ -56,20 +47,20 @@ The statute decks are maintained as JSON files in `dataLayer/statuteDecks/` and 
 
 ## App Identity
 
-- Display Name: `Gemini-Powered-Law-Guidance Public`
-- Expo Slug: `gemini-powered-law-guidance-public`
-- Scheme: `gemini-powered-law-guidance-public`
-- Android Package: `com.bibek.geminipoweredlawguidancepublic`
-- iOS Bundle ID: `com.bibek.geminipoweredlawguidancepublic`
-- npm Package Name: `gemini-powered-law-guidance-public`
+- Display Name: `Gemini Powered Law Assistant`
+- Expo Slug: `gemini-powered-law-assistant-mobile`
+- Scheme: `gemini-powered-law-assistant`
+- Android Package: `com.geminipoweredlawassistant.mobile`
+- iOS Bundle ID: `com.geminipoweredlawassistant.mobile`
+- npm Package Name: `gemini-powered-law-assistant-mobile`
 
 ## Environment Setup
 
 Create a `.env` file in project root:
 
 ```bash
-EXPO_PUBLIC_GEMINI_API_KEY=your_api_key_here
-EXPO_PUBLIC_GEMINI_MODEL=gemini-3-flash-preview
+EXPO_PUBLIC_LAW_ASSISTANT_API_KEY=your_api_key_here
+EXPO_PUBLIC_LAW_ASSISTANT_MODEL=gemini-3-flash-preview
 ```
 
 ## Local Development
@@ -94,9 +85,3 @@ npm run build:ios
 npm run submit:android
 npm run submit:ios
 ```
-
-## Compliance and Usage Notes
-
-- AI output is assistive content and must be legally verified before final use.
-- Case records are stored locally unless a user explicitly exports or shares files.
-- This product supports legal workflows; it is not a law firm service or legal representation.

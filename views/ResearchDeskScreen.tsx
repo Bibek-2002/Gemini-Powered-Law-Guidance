@@ -7,13 +7,13 @@ import AnalysisPanel from '../uiBlocks/ResearchDesk/AnalysisPanel';
 import ExecuteAnalysisButton from '../uiBlocks/ResearchDesk/ExecuteAnalysisButton';
 import DraftReadyBanner from '../uiBlocks/ResearchDesk/DraftReadyBanner';
 import DraftCaseSheet from '../uiBlocks/ResearchDesk/DraftCaseSheet';
-import { fetchLegalAnalysis, LegalResponsePayload } from '../integrations/legalInsightGateway';
-import { DraftCaseRecord, CaseRecord } from '../domain/caseModels';
-import { loadCases, persistCases } from '../integrations/caseLedgerStore';
+import { requestGuidanceSummary, GuidanceSummaryPayload } from '../services/guidanceApiClient';
+import { DraftMatterRecord, MatterRecord } from '../entities/caseTypes';
+import { readMatterLedger, writeMatterLedger } from '../services/caseMemoryStore';
 
 const OUTPUT_PLACEHOLDER = 'Response will appear here...';
 
-const createInitialDraft = (): DraftCaseRecord => ({
+const createInitialMatterDraft = (): DraftMatterRecord => ({
   caseHeading: '',
   userQuery: '',
   tags: '',
@@ -21,7 +21,7 @@ const createInitialDraft = (): DraftCaseRecord => ({
   caseStatus: 'closed',
 });
 
-const serializeActs = (acts: Record<string, string>): string => {
+const formatActsForLedger = (acts: Record<string, string>): string => {
   return Object.entries(acts)
     .map(([section, reason]) => `**${section}** ${reason}`)
     .join('\n');
@@ -29,14 +29,14 @@ const serializeActs = (acts: Record<string, string>): string => {
 
 const ResearchDeskScreen: React.FC = () => {
   const [queryText, setQueryText] = useState<string>('');
-  const [analysisResult, setAnalysisResult] = useState<LegalResponsePayload | string>(OUTPUT_PLACEHOLDER);
+  const [analysisResult, setAnalysisResult] = useState<GuidanceSummaryPayload | string>(OUTPUT_PLACEHOLDER);
   const [voiceEnabled, setVoiceEnabled] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [saveHintVisible, setSaveHintVisible] = useState<boolean>(false);
   const [editorOpen, setEditorOpen] = useState<boolean>(false);
   const [requestError, setRequestError] = useState<string>('');
-  const [draftCase, setDraftCase] = useState<DraftCaseRecord>(createInitialDraft());
-  const [analysisActs, setAnalysisActs] = useState<Record<string, string>>({});
+  const [draftMatter, setDraftMatter] = useState<DraftMatterRecord>(createInitialMatterDraft());
+  const [citedActs, setCitedActs] = useState<Record<string, string>>({});
 
   const canSubmit = useMemo(() => Boolean(queryText.trim()) && !isSubmitting, [queryText, isSubmitting]);
 
@@ -53,7 +53,7 @@ const ResearchDeskScreen: React.FC = () => {
     }
   };
 
-  const buildDraftFromAnalysis = (analysis: LegalResponsePayload): DraftCaseRecord => ({
+  const createDraftFromGuidance = (analysis: GuidanceSummaryPayload): DraftMatterRecord => ({
     caseHeading: 'Legal Analysis Result',
     userQuery: queryText.trim(),
     tags: Object.keys(analysis.acts ?? {}).join(', '),
@@ -61,7 +61,7 @@ const ResearchDeskScreen: React.FC = () => {
     caseStatus: 'under investigation',
   });
 
-  const runAnalysis = async (): Promise<void> => {
+  const executeGuidanceRequest = async (): Promise<void> => {
     if (!canSubmit) {
       return;
     }
@@ -70,42 +70,42 @@ const ResearchDeskScreen: React.FC = () => {
     setRequestError('');
 
     try {
-      const payload = await fetchLegalAnalysis(queryText.trim());
+      const payload = await requestGuidanceSummary(queryText.trim());
       setAnalysisResult(payload);
-      setAnalysisActs(payload.acts ?? {});
-      setDraftCase(buildDraftFromAnalysis(payload));
+      setCitedActs(payload.acts ?? {});
+      setDraftMatter(createDraftFromGuidance(payload));
       setSaveHintVisible(true);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Failed to process your query.';
       setRequestError(message);
       setAnalysisResult('');
-      setAnalysisActs({});
+      setCitedActs({});
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const updateDraftField = (field: string, value: string): void => {
-    setDraftCase((current) => ({
+  const updateDraftMatterField = (field: string, value: string): void => {
+    setDraftMatter((current) => ({
       ...current,
       [field]: value,
     }));
   };
 
-  const saveCaseToLocalStore = async (): Promise<void> => {
+  const saveMatterToLedger = async (): Promise<void> => {
     try {
-      const existing = await loadCases();
-      const newCase: CaseRecord = {
+      const existing = await readMatterLedger();
+      const newRecord: MatterRecord = {
         id: Date.now(),
-        caseHeading: draftCase.caseHeading,
-        query: draftCase.userQuery,
-        applicableArticle: serializeActs(analysisActs),
-        description: draftCase.description,
-        status: draftCase.caseStatus,
-        tags: draftCase.tags,
+        caseHeading: draftMatter.caseHeading,
+        query: draftMatter.userQuery,
+        applicableArticle: formatActsForLedger(citedActs),
+        description: draftMatter.description,
+        status: draftMatter.caseStatus,
+        tags: draftMatter.tags,
       };
 
-      await persistCases([newCase, ...existing]);
+      await writeMatterLedger([newRecord, ...existing]);
       Alert.alert('Success', 'Case saved successfully to local storage');
       setEditorOpen(false);
       setSaveHintVisible(false);
@@ -128,7 +128,7 @@ const ResearchDeskScreen: React.FC = () => {
 
         <QueryComposer value={queryText} onChangeText={setQueryText} onMicPress={toggleVoiceCapture} isListening={voiceEnabled} />
 
-        <ExecuteAnalysisButton onPress={runAnalysis} disabled={!canSubmit} />
+        <ExecuteAnalysisButton onPress={executeGuidanceRequest} disabled={!canSubmit} />
 
         <DraftReadyBanner
           visible={saveHintVisible}
@@ -140,10 +140,10 @@ const ResearchDeskScreen: React.FC = () => {
 
         <DraftCaseSheet
           visible={editorOpen}
-          caseDetails={draftCase}
+          caseDetails={draftMatter}
           onClose={() => setEditorOpen(false)}
-          onSave={saveCaseToLocalStore}
-          onInputChange={updateDraftField}
+          onSave={saveMatterToLedger}
+          onInputChange={updateDraftMatterField}
         />
       </View>
     </ScrollView>

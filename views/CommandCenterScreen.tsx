@@ -28,7 +28,7 @@ const CommandCenterScreen: React.FC = () => {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <LinearGradient colors={['#0A0F1D', '#11284A', '#0E7490']} style={styles.hero}>
-        <Text style={styles.badge}>Gemini-Powered-Law-Guidance</Text>
+        <Text style={styles.badge}>Gemini Powered Law Assistant</Text>
         <Text style={styles.title}>Legal Command Deck</Text>
         <Text style={styles.subtitle}>
           A redesigned workflow app for legal drafting, research, records, and incident reporting.
@@ -234,4 +234,5 @@ const styles = StyleSheet.create({
 });
 
 export default CommandCenterScreen;
+
 

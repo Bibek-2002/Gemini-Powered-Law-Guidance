@@ -5,30 +5,30 @@ import VaultCaseTile from '../uiBlocks/DocketVault/VaultCaseTile';
 import VaultCaseSheet from '../uiBlocks/DocketVault/VaultCaseSheet';
 import ScrollResetButton from '../uiBlocks/DocketVault/ScrollResetButton';
 import VaultEmptyPanel from '../uiBlocks/DocketVault/VaultEmptyPanel';
-import { CaseRecord } from '../domain/caseModels';
-import { loadCases, persistCases } from '../integrations/caseLedgerStore';
+import { MatterRecord } from '../entities/caseTypes';
+import { readMatterLedger, writeMatterLedger } from '../services/caseMemoryStore';
 
 const DocketVaultScreen: React.FC = () => {
-  const [records, setRecords] = useState<CaseRecord[]>([]);
-  const [selectedRecord, setSelectedRecord] = useState<CaseRecord | null>(null);
+  const [ledgerRecords, setLedgerRecords] = useState<MatterRecord[]>([]);
+  const [selectedRecord, setSelectedRecord] = useState<MatterRecord | null>(null);
   const [isEditorEnabled, setIsEditorEnabled] = useState<boolean>(false);
-  const [draftRecord, setDraftRecord] = useState<Partial<CaseRecord>>({});
+  const [draftRecord, setDraftRecord] = useState<Partial<MatterRecord>>({});
   const [showScrollTopButton, setShowScrollTopButton] = useState<boolean>(false);
   const scrollRef = useRef<ScrollView>(null);
 
-  const count = useMemo(() => records.length, [records.length]);
+  const totalRecords = useMemo(() => ledgerRecords.length, [ledgerRecords.length]);
 
-  const refreshRecords = useCallback(async () => {
-    const stored = await loadCases();
-    setRecords(stored);
+  const refreshLedger = useCallback(async () => {
+    const stored = await readMatterLedger();
+    setLedgerRecords(stored);
   }, []);
 
   useEffect(() => {
-    refreshRecords();
-  }, [refreshRecords]);
+    refreshLedger();
+  }, [refreshLedger]);
 
   const openRecord = (recordId: number, editMode: boolean): void => {
-    const match = records.find((record) => record.id === recordId);
+    const match = ledgerRecords.find((record) => record.id === recordId);
     if (!match) {
       return;
     }
@@ -75,7 +75,7 @@ const DocketVaultScreen: React.FC = () => {
       return;
     }
 
-    const nextRecords = records.map((record) =>
+    const nextRecords = ledgerRecords.map((record) =>
       record.id === selectedRecord.id
         ? {
             ...record,
@@ -90,8 +90,8 @@ const DocketVaultScreen: React.FC = () => {
     );
 
     try {
-      await persistCases(nextRecords);
-      setRecords(nextRecords);
+      await writeMatterLedger(nextRecords);
+      setLedgerRecords(nextRecords);
       closeModal();
       Alert.alert('Success', 'Changes saved successfully');
     } catch {
@@ -115,7 +115,7 @@ const DocketVaultScreen: React.FC = () => {
         scrollEventThrottle={16}
         onScroll={(event) => handleScroll(event.nativeEvent.contentOffset.y)}
       >
-        <VaultHeaderCard count={count} />
+        <VaultHeaderCard count={totalRecords} />
 
         <View style={styles.infoBand}>
           <Text style={styles.infoText}>
@@ -123,11 +123,11 @@ const DocketVaultScreen: React.FC = () => {
           </Text>
         </View>
 
-        {records.length === 0 ? (
+        {ledgerRecords.length === 0 ? (
           <VaultEmptyPanel />
         ) : (
           <FlatList
-            data={records}
+            data={ledgerRecords}
             keyExtractor={(item) => String(item.id)}
             scrollEnabled={false}
             contentContainerStyle={styles.list}

@@ -1,11 +1,11 @@
-﻿import React from 'react';
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import TagList from './CaseTagChips';
 import StatusBadge from './CaseStatusPill';
-import { CaseRecord } from '../../domain/caseModels';
+import { MatterRecord } from '../../entities/caseTypes';
 
 interface CaseCardProps {
-  caseItem: CaseRecord;
+  caseItem: MatterRecord;
   onShowDetails: (id: number) => void;
   onEdit: (id: number) => void;
 }
@@ -98,4 +98,6 @@ const styles = StyleSheet.create({
 });
 
 export default VaultCaseTile;
+
+
 

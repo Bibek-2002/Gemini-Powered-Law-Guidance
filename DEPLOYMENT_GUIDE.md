@@ -1,4 +1,4 @@
-# Gemini-Powered-Law-Guidance Public Deployment Guide
+# Gemini Powered Law Assistant Deployment Guide
 
 Deployment checklist for Expo + EAS releases.
 
@@ -31,11 +31,11 @@ eas build:configure
 
 Confirm these values in `app.json`:
 
-- `name`: `Gemini-Powered-Law-Guidance Public`
-- `slug`: `gemini-powered-law-guidance-public`
-- `scheme`: `gemini-powered-law-guidance-public`
-- `android.package`: `com.bibek.geminipoweredlawguidancepublic`
-- `ios.bundleIdentifier`: `com.bibek.geminipoweredlawguidancepublic`
+- `name`: `Gemini Powered Law Assistant`
+- `slug`: `gemini-powered-law-assistant-mobile`
+- `scheme`: `gemini-powered-law-assistant`
+- `android.package`: `com.geminipoweredlawassistant.mobile`
+- `ios.bundleIdentifier`: `com.geminipoweredlawassistant.mobile`
 
 ## Build Commands
 
@@ -54,17 +54,15 @@ npm run submit:ios
 ## Runtime Environment
 
 ```bash
-EXPO_PUBLIC_GEMINI_API_KEY=your_api_key_here
-EXPO_PUBLIC_GEMINI_MODEL=gemini-3-flash-preview
+EXPO_PUBLIC_LAW_ASSISTANT_API_KEY=your_api_key_here
+EXPO_PUBLIC_LAW_ASSISTANT_MODEL=gemini-3-flash-preview
 ```
 
 ## Branding Assets
 
 - `assets/icon.png`
-- `assets/adaptive-icon.png`
 - `assets/splash-icon.png`
 - `assets/favicon.png`
-- `assets/gemini-guidance-icon.svg`
 
 ## Release Validation Checklist
 

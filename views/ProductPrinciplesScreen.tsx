@@ -22,7 +22,7 @@ const ProductPrinciplesScreen: React.FC = () => {
       <LinearGradient colors={['#0A0F1D', '#1B3B67', '#0A596E']} style={styles.header}>
         <Text style={styles.headerTag}>Principles</Text>
         <Text style={styles.headerTitle}>Practical Legal Workflow Platform</Text>
-        <Text style={styles.headerSubtitle}>Gemini-Powered-Law-Guidance Public focuses on real productivity and traceable legal operations.</Text>
+        <Text style={styles.headerSubtitle}>Gemini Powered Law Assistant focuses on real productivity and traceable legal operations.</Text>
       </LinearGradient>
 
       <View style={styles.directionCard}>
@@ -176,4 +176,5 @@ const styles = StyleSheet.create({
 });
 
 export default ProductPrinciplesScreen;
+
 
