@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "LawAI Mobile",
-    "slug": "lawai-mobile",
+    "name": "NyayaFlow Assist",
+    "slug": "nyayaflow-assist",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "scheme": "lawai-mobile",
+    "scheme": "nyayaflow-assist",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -15,11 +15,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.lawai.mobile",
+      "bundleIdentifier": "com.bibek.nyayaflowassist",
       "buildNumber": "1.0.0"
     },
     "android": {
-      "package": "com.lawai.mobile",
+      "package": "com.bibek.nyayaflowassist",
       "permissions": [
         "android.permission.INTERNET",
         "android.permission.ACCESS_NETWORK_STATE",
@@ -29,11 +29,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "9189eb67-17e5-455c-b6fa-d4d3ae67a815"
-      }
     },
     "plugins": [
       "expo-asset",
