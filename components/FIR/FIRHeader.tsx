@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -10,29 +10,29 @@ interface FIRHeaderProps {
 
 const FIRHeader: React.FC<FIRHeaderProps> = ({ title, subtitle }) => {
   return (
-    <LinearGradient colors={['#0A0F1D', '#17345E', '#0B4A6F']} style={styles.header}>
-      <View style={styles.headerContent}>
+    <LinearGradient colors={['#0A0F1D', '#17345E', '#0B4A6F']} style={styles.container}>
+      <View style={styles.content}>
         <View style={styles.iconWrap}>
           <Ionicons name="document-text" size={26} color="#05111F" />
         </View>
-        <Text style={styles.headerTitle}>{title}</Text>
-        <Text style={styles.headerSubtitle}>{subtitle}</Text>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
     </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {
-    paddingVertical: 24,
-    paddingHorizontal: 18,
-    borderRadius: 24,
+  container: {
     marginHorizontal: 20,
     marginTop: 18,
+    borderRadius: 24,
     borderWidth: 1,
     borderColor: '#26486D',
+    paddingHorizontal: 18,
+    paddingVertical: 24,
   },
-  headerContent: {
+  content: {
     alignItems: 'flex-start',
     gap: 7,
   },
@@ -44,15 +44,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  headerTitle: {
+  title: {
+    color: '#EAF4FF',
     fontSize: 28,
     fontWeight: '800',
-    color: '#EAF4FF',
     lineHeight: 34,
   },
-  headerSubtitle: {
-    fontSize: 13,
+  subtitle: {
     color: '#A8C0DD',
+    fontSize: 13,
     lineHeight: 19,
   },
 });

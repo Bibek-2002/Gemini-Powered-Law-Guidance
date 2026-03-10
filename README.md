@@ -23,6 +23,15 @@ npm install
 npm run start
 ```
 
+## Environment Setup
+
+Create or update `.env` in project root:
+
+```bash
+EXPO_PUBLIC_GEMINI_API_KEY=your_api_key_here
+EXPO_PUBLIC_GEMINI_MODEL=gemini-3-flash-preview
+```
+
 ## Build Scripts
 
 ```bash

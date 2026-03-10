@@ -9,9 +9,9 @@ interface DatabaseHeaderProps {
 
 const DatabaseHeader: React.FC<DatabaseHeaderProps> = ({ title = 'Case Database', count = 0 }) => {
   return (
-    <View style={styles.wrap}>
-      <View style={styles.left}>
-        <View style={styles.icon}>
+    <View style={styles.container}>
+      <View style={styles.titleRow}>
+        <View style={styles.iconWrap}>
           <Ionicons name="archive" size={19} color="#05111F" />
         </View>
         <View>
@@ -27,23 +27,23 @@ const DatabaseHeader: React.FC<DatabaseHeaderProps> = ({ title = 'Case Database'
 };
 
 const styles = StyleSheet.create({
-  wrap: {
+  container: {
     marginHorizontal: 20,
     marginTop: 18,
     marginBottom: 12,
     borderRadius: 20,
-    backgroundColor: '#101D34',
     borderWidth: 1,
     borderColor: '#294569',
-    padding: 14,
+    backgroundColor: '#101D34',
     gap: 10,
+    padding: 14,
   },
-  left: {
+  titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
   },
-  icon: {
+  iconWrap: {
     width: 36,
     height: 36,
     borderRadius: 11,
@@ -64,9 +64,9 @@ const styles = StyleSheet.create({
   badge: {
     alignSelf: 'flex-start',
     borderRadius: 999,
-    backgroundColor: '#0A2230',
     borderWidth: 1,
     borderColor: '#1E5366',
+    backgroundColor: '#0A2230',
     paddingHorizontal: 10,
     paddingVertical: 4,
   },
@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
     color: '#7DF9FF',
     fontSize: 10,
     fontWeight: '800',
-    textTransform: 'uppercase',
     letterSpacing: 0.8,
+    textTransform: 'uppercase',
   },
 });
 

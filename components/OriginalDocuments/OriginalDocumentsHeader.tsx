@@ -14,8 +14,8 @@ const OriginalDocumentsHeader: React.FC<OriginalDocumentsHeaderProps> = ({
   iconName = 'folder-open',
 }) => {
   return (
-    <View style={styles.wrap}>
-      <View style={styles.icon}>
+    <View style={styles.container}>
+      <View style={styles.iconWrap}>
         <Ionicons name={iconName} size={18} color="#05111F" />
       </View>
       <View style={styles.textWrap}>
@@ -27,20 +27,20 @@ const OriginalDocumentsHeader: React.FC<OriginalDocumentsHeaderProps> = ({
 };
 
 const styles = StyleSheet.create({
-  wrap: {
+  container: {
     marginHorizontal: 20,
     marginTop: 18,
     marginBottom: 10,
-    backgroundColor: '#101D34',
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#2A4468',
-    padding: 14,
+    backgroundColor: '#101D34',
     flexDirection: 'row',
-    gap: 10,
     alignItems: 'center',
+    gap: 10,
+    padding: 14,
   },
-  icon: {
+  iconWrap: {
     width: 34,
     height: 34,
     borderRadius: 10,

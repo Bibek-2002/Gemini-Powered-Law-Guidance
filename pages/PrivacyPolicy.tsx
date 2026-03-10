@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const sections = [
+const privacySections = [
   {
     title: 'Data Scope',
     text: 'LawAI Mobile stores case-related content locally to support history and workflow continuity.',
@@ -27,17 +27,15 @@ const sections = [
 
 const PrivacyPolicy: React.FC = () => {
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
-      <LinearGradient colors={['#0A0F1D', '#16345D', '#0B4A6F']} style={styles.header}>
-        <Text style={styles.headerTag}>Policy</Text>
-        <Text style={styles.headerTitle}>Privacy Overview</Text>
-        <Text style={styles.headerSubtitle}>
-          How data is handled in the current LawAI Mobile release.
-        </Text>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <LinearGradient colors={['#0A0F1D', '#16345D', '#0B4A6F']} style={styles.hero}>
+        <Text style={styles.heroTag}>Policy</Text>
+        <Text style={styles.heroTitle}>Privacy Overview</Text>
+        <Text style={styles.heroSubtitle}>How data is handled in the current LawAI Mobile release.</Text>
       </LinearGradient>
 
-      <View style={styles.sectionWrap}>
-        {sections.map((section) => (
+      <View style={styles.sectionList}>
+        {privacySections.map((section) => (
           <View key={section.title} style={styles.sectionCard}>
             <Text style={styles.sectionTitle}>{section.title}</Text>
             <Text style={styles.sectionText}>{section.text}</Text>
@@ -49,48 +47,48 @@ const PrivacyPolicy: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
     backgroundColor: '#050A18',
   },
-  contentContainer: {
+  content: {
+    gap: 14,
     padding: 18,
     paddingBottom: 26,
-    gap: 14,
   },
-  header: {
+  hero: {
     borderRadius: 24,
-    padding: 20,
     borderWidth: 1,
     borderColor: '#26486D',
+    padding: 20,
   },
-  headerTag: {
+  heroTag: {
     color: '#7DF9FF',
     fontSize: 11,
+    fontWeight: '800',
     letterSpacing: 1,
     textTransform: 'uppercase',
-    fontWeight: '800',
     marginBottom: 8,
   },
-  headerTitle: {
+  heroTitle: {
     color: '#EAF4FF',
     fontSize: 27,
     fontWeight: '800',
     marginBottom: 8,
   },
-  headerSubtitle: {
+  heroSubtitle: {
     color: '#A8C0DD',
     fontSize: 14,
     lineHeight: 20,
   },
-  sectionWrap: {
+  sectionList: {
     gap: 10,
   },
   sectionCard: {
-    backgroundColor: '#101D34',
     borderRadius: 14,
     borderWidth: 1,
     borderColor: '#294569',
+    backgroundColor: '#101D34',
     padding: 13,
   },
   sectionTitle: {

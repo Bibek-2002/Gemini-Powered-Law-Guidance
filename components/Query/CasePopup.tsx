@@ -8,7 +8,9 @@ interface CasePopupProps {
 }
 
 const CasePopup: React.FC<CasePopupProps> = ({ visible, onPress }) => {
-  if (!visible) return null;
+  if (!visible) {
+    return null;
+  }
 
   return (
     <TouchableOpacity style={styles.popup} onPress={onPress} activeOpacity={0.9}>
@@ -25,14 +27,14 @@ const styles = StyleSheet.create({
     right: 20,
     bottom: 92,
     borderRadius: 14,
-    backgroundColor: '#0F172A',
     borderWidth: 1,
     borderColor: '#1E3A8A',
-    paddingHorizontal: 12,
-    paddingVertical: 11,
+    backgroundColor: '#0F172A',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 11,
   },
   text: {
     flex: 1,

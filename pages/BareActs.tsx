@@ -121,48 +121,53 @@ const mva: SectionData[] =[
   
 ]
 
-const BareActs = () => {
+const ACT_COLLECTIONS = {
+  BNS: bns,
+  IPC: ipc,
+  CRPC: crpc,
+  IEA: iea,
+  CPC: cpc,
+  MVA: mva,
+} as const;
+
+type ActKey = keyof typeof ACT_COLLECTIONS;
+
+const actTabs: ActKey[] = ['BNS', 'IPC', 'CRPC', 'IEA', 'CPC', 'MVA'];
+
+const BareActs: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activeSection, setActiveSection] = useState<string | null>('BNS');
+  const [query, setQuery] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<ActKey>('BNS');
 
   useEffect(() => {
     setLoading(false);
   }, []);
 
-  if (loading) {
+  const activeData = ACT_COLLECTIONS[activeTab] ?? [];
+
+  const filteredData = activeData.filter((section) => {
+    if (!query.trim()) {
+      return true;
+    }
+
+    const normalized = query.toLowerCase();
     return (
-      <ActivityIndicator
-        size="large"
-        color="#1E40AF"
-        style={styles.loader}
-      />
+      section.section_id.toLowerCase().includes(normalized)
+      || section.section_title.toLowerCase().includes(normalized)
     );
+  });
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#1E40AF" style={styles.loader} />;
   }
 
-  if (!bns || bns.length === 0) {
+  if (!Array.isArray(bns) || bns.length === 0) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>
-          No data found or an error occurred!
-        </Text>
+        <Text style={styles.errorText}>No data found or an error occurred!</Text>
       </View>
     );
   }
-
-  const toggleSection = (section: string) => {
-    setActiveSection(activeSection === section ? null : section);
-  };
-
-  const filterSections = (sections: SectionData[]) => {
-    if (!searchQuery) return sections;
-    const q = searchQuery.toLowerCase();
-    return sections.filter(
-      (item) =>
-        item.section_id.toLowerCase().includes(q) ||
-        item.section_title.toLowerCase().includes(q)
-    );
-  };
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -175,23 +180,13 @@ const BareActs = () => {
       </View>
 
       <View style={styles.cardContainer}>
-        {['BNS', 'IPC', 'CRPC', 'IEA', 'CPC', 'MVA'].map((item) => (
+        {actTabs.map((tab) => (
           <TouchableOpacity
-            key={item}
-            style={[
-              styles.sectionCard,
-              activeSection === item && styles.sectionCardActive,
-            ]}
-            onPress={() => toggleSection(item)}
+            key={tab}
+            style={[styles.sectionCard, activeTab === tab && styles.sectionCardActive]}
+            onPress={() => setActiveTab(tab)}
           >
-            <Text
-              style={[
-                styles.sectionCardText,
-                activeSection === item && styles.sectionCardTextActive,
-              ]}
-            >
-              {item}
-            </Text>
+            <Text style={[styles.sectionCardText, activeTab === tab && styles.sectionCardTextActive]}>{tab}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -200,56 +195,23 @@ const BareActs = () => {
         style={styles.searchBar}
         placeholder="Search by Section ID or Title"
         placeholderTextColor="#64748B"
-        value={searchQuery}
-        onChangeText={setSearchQuery}
+        value={query}
+        onChangeText={setQuery}
       />
 
-      {activeSection &&
-        {
-          BNS: bns,
-          IPC: ipc,
-          CRPC: crpc,
-          IEA: iea,
-          CPC: cpc,
-          MVA: mva,
-        }[activeSection] && (
-          <View style={styles.detailsContainer}>
-            <Text style={styles.resultsLabel}>
-              {activeSection} Results ({filterSections(
-                {
-                  BNS: bns,
-                  IPC: ipc,
-                  CRPC: crpc,
-                  IEA: iea,
-                  CPC: cpc,
-                  MVA: mva,
-                }[activeSection]
-              ).length})
-            </Text>
-            {filterSections(
-              {
-                BNS: bns,
-                IPC: ipc,
-                CRPC: crpc,
-                IEA: iea,
-                CPC: cpc,
-                MVA: mva,
-              }[activeSection]
-            ).map((item, index) => (
-              <View key={index} style={styles.detailCard}>
-                <Text style={styles.sectionId}>
-                  Section {item.section_id}
-                </Text>
-                <Text style={styles.sectionTitle}>
-                  {item.section_title}
-                </Text>
-                <Text style={styles.sectionDescription}>
-                  {item.description}
-                </Text>
-              </View>
-            ))}
+      <View style={styles.detailsContainer}>
+        <Text style={styles.resultsLabel}>
+          {activeTab} Results ({filteredData.length})
+        </Text>
+
+        {filteredData.map((section, index) => (
+          <View key={`${section.section_id}-${index}`} style={styles.detailCard}>
+            <Text style={styles.sectionId}>Section {section.section_id}</Text>
+            <Text style={styles.sectionTitle}>{section.section_title}</Text>
+            <Text style={styles.sectionDescription}>{section.description}</Text>
           </View>
-        )}
+        ))}
+      </View>
     </ScrollView>
   );
 };
@@ -260,7 +222,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#050A18',
     paddingHorizontal: 18,
   },
-
   hero: {
     marginTop: 16,
     marginBottom: 14,
@@ -277,9 +238,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   header: {
+    color: '#EAF4FF',
     fontSize: 29,
     fontWeight: '800',
-    color: '#EAF4FF',
     marginBottom: 8,
   },
   heroSubtitle: {
@@ -287,59 +248,51 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 19,
   },
-
   cardContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     marginBottom: 12,
   },
-
   sectionCard: {
     width: '48%',
     minHeight: 58,
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#294569',
     backgroundColor: '#101D34',
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingVertical: 14,
     marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#294569',
   },
-
   sectionCardActive: {
-    backgroundColor: '#7DF9FF',
     borderColor: '#7DF9FF',
+    backgroundColor: '#7DF9FF',
   },
-
   sectionCardText: {
+    color: '#D5E6FD',
     fontSize: 17,
     fontWeight: '700',
-    color: '#D5E6FD',
   },
-
   sectionCardTextActive: {
     color: '#05111F',
   },
-
   searchBar: {
     minHeight: 50,
     borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#294569',
     backgroundColor: '#101D34',
     paddingHorizontal: 14,
     fontSize: 15,
     color: '#EAF3FF',
-    borderWidth: 1,
-    borderColor: '#294569',
     marginBottom: 14,
   },
-
   detailsContainer: {
     paddingBottom: 30,
     gap: 10,
   },
-
   resultsLabel: {
     color: '#A8C0DD',
     fontSize: 12,
@@ -348,54 +301,46 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
     marginBottom: 2,
   },
-
   detailCard: {
-    backgroundColor: '#101D34',
     borderRadius: 14,
-    padding: 14,
     borderWidth: 1,
     borderColor: '#294569',
+    backgroundColor: '#101D34',
+    padding: 14,
   },
-
   sectionId: {
+    color: '#F6A720',
     fontSize: 11,
     fontWeight: '700',
-    color: '#F6A720',
-    marginBottom: 6,
     textTransform: 'uppercase',
     letterSpacing: 1,
+    marginBottom: 6,
   },
-
   sectionTitle: {
+    color: '#EAF3FF',
     fontSize: 16,
     fontWeight: '700',
-    color: '#EAF3FF',
     marginBottom: 7,
   },
-
   sectionDescription: {
+    color: '#A3B8D4',
     fontSize: 13,
     lineHeight: 20,
-    color: '#A3B8D4',
   },
-
   loader: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
   },
-
   errorContainer: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
   },
-
   errorText: {
-    fontSize: 16,
     color: '#DC2626',
+    fontSize: 16,
   },
 });
 
 export default BareActs;
-

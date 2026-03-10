@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface ErrorStateProps {
@@ -18,11 +18,11 @@ const ErrorState: React.FC<ErrorStateProps> = ({
       <View style={styles.content}>
         <Ionicons name="warning" size={46} color="#F6A720" />
         <Text style={styles.message}>{message}</Text>
-        {onRetry && (
+        {onRetry ? (
           <TouchableOpacity style={styles.retryButton} onPress={onRetry}>
             <Text style={styles.retryText}>{retryText}</Text>
           </TouchableOpacity>
-        )}
+        ) : null}
       </View>
     </View>
   );
@@ -31,26 +31,26 @@ const ErrorState: React.FC<ErrorStateProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 40,
+    justifyContent: 'center',
     paddingHorizontal: 20,
+    paddingVertical: 40,
   },
   content: {
     alignItems: 'center',
   },
   message: {
-    fontSize: 14,
     color: '#F6A720',
+    fontSize: 14,
     textAlign: 'center',
-    marginBottom: 20,
     lineHeight: 20,
+    marginBottom: 20,
   },
   retryButton: {
-    backgroundColor: '#7DF9FF',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
     borderRadius: 8,
+    backgroundColor: '#7DF9FF',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   retryText: {
     color: '#05111F',

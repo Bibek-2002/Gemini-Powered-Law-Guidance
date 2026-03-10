@@ -1,188 +1,155 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, FlatList, useWindowDimensions, StyleSheet, Alert, Text } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Alert, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 import DatabaseHeader from '../components/Database/DatabaseHeader';
 import CaseCard from '../components/Database/CaseCard';
 import CaseModal from '../components/Database/CaseModal';
 import ScrollToTopButton from '../components/Database/ScrollToTopButton';
 import EmptyState from '../components/Database/EmptyState';
+import { CaseRecord } from '../types/cases';
+import { loadCases, persistCases } from '../services/localCaseStore';
 
-interface CaseItem {
-  id: number;
-  caseHeading: string;
-  query: string;
-  applicableArticle?: string;
-  description: string;
-  status: string;
-  tags?: string;
-}
+const Database: React.FC = () => {
+  const [records, setRecords] = useState<CaseRecord[]>([]);
+  const [selectedRecord, setSelectedRecord] = useState<CaseRecord | null>(null);
+  const [isEditorEnabled, setIsEditorEnabled] = useState<boolean>(false);
+  const [draftRecord, setDraftRecord] = useState<Partial<CaseRecord>>({});
+  const [showScrollTopButton, setShowScrollTopButton] = useState<boolean>(false);
+  const scrollRef = useRef<ScrollView>(null);
 
-const Database = () => {
-  const [cases, setCases] = useState<CaseItem[]>([]);
-  const [activeCase, setActiveCase] = useState<CaseItem | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [showScrollBtn, setShowScrollBtn] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedCaseData, setEditedCaseData] = useState<Partial<CaseItem>>({});
+  const count = useMemo(() => records.length, [records.length]);
 
-  const { width } = useWindowDimensions();
-  const scrollViewRef = useRef<ScrollView>(null);
-
-  useEffect(() => {
-    setIsMobile(width < 768);
-  }, [width]);
-
-  const fetchData = async () => {
-    try {
-      const storedCases = await AsyncStorage.getItem('local_cases');
-      if (storedCases) {
-        setCases(JSON.parse(storedCases));
-      } else {
-        setCases([]);
-      }
-    } catch (error) {
-      console.error('Error fetching cases from storage:', error);
-      setCases([]);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
+  const refreshRecords = useCallback(async () => {
+    const stored = await loadCases();
+    setRecords(stored);
   }, []);
 
-  const openCaseDetailsModal = (id: number) => {
-    const caseItem = cases.find((caseItem) => caseItem.id === id);
-    if (caseItem) {
-      setActiveCase(caseItem);
-      setEditedCaseData(caseItem);
-      setIsEditing(false);
+  useEffect(() => {
+    refreshRecords();
+  }, [refreshRecords]);
+
+  const openRecord = (recordId: number, editMode: boolean): void => {
+    const match = records.find((record) => record.id === recordId);
+    if (!match) {
+      return;
     }
+    setSelectedRecord(match);
+    setDraftRecord(match);
+    setIsEditorEnabled(editMode);
   };
 
-  const closeCaseDetailsModal = () => {
-    setActiveCase(null);
-    setIsEditing(false);
+  const closeModal = (): void => {
+    setSelectedRecord(null);
+    setIsEditorEnabled(false);
+    setDraftRecord({});
   };
 
-  const handleEditToggle = () => {
-    setIsEditing((prev) => !prev);
+  const toggleEditor = (): void => {
+    setIsEditorEnabled((current) => !current);
   };
 
-  const handleSaveChanges = async () => {
-    if (!activeCase) return;
+  const patchDraftValue = (fieldName: string, fieldValue: string): void => {
+    setDraftRecord((current) => ({
+      ...current,
+      [fieldName]: fieldValue,
+    }));
+  };
 
-    const updatedCases = cases.map((caseItem) =>
-      caseItem.id === activeCase.id
+  const removeTagByIndex = (tagIndex: number): void => {
+    const sourceTags = String(draftRecord.tags ?? selectedRecord?.tags ?? '');
+    if (!sourceTags) {
+      return;
+    }
+
+    const nextTags = sourceTags
+      .replace(/[\[\]']+/g, '')
+      .split(',')
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+
+    nextTags.splice(tagIndex, 1);
+    patchDraftValue('tags', nextTags.join(', '));
+  };
+
+  const saveRecordChanges = async (): Promise<void> => {
+    if (!selectedRecord) {
+      return;
+    }
+
+    const nextRecords = records.map((record) =>
+      record.id === selectedRecord.id
         ? {
-            ...caseItem,
-            caseHeading: editedCaseData.caseHeading || caseItem.caseHeading,
-            query: editedCaseData.query || caseItem.query,
-            applicableArticle: editedCaseData.applicableArticle || caseItem.applicableArticle,
-            description: editedCaseData.description || caseItem.description,
-            status: editedCaseData.status || caseItem.status,
-            tags: editedCaseData.tags || caseItem.tags,
+            ...record,
+            caseHeading: draftRecord.caseHeading || record.caseHeading,
+            query: draftRecord.query || record.query,
+            applicableArticle: draftRecord.applicableArticle ?? record.applicableArticle,
+            description: draftRecord.description || record.description,
+            status: draftRecord.status || record.status,
+            tags: draftRecord.tags ?? record.tags,
           }
-        : caseItem
+        : record
     );
 
     try {
-      await AsyncStorage.setItem('local_cases', JSON.stringify(updatedCases));
-      setCases(updatedCases);
-      setActiveCase(null);
-      setIsEditing(false);
+      await persistCases(nextRecords);
+      setRecords(nextRecords);
+      closeModal();
       Alert.alert('Success', 'Changes saved successfully');
-    } catch (error) {
+    } catch {
       Alert.alert('Error', 'Failed to save changes');
     }
   };
 
-  const handleInputChange = (name: string, value: string) => {
-    setEditedCaseData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  const handleScroll = (yOffset: number): void => {
+    setShowScrollTopButton(yOffset > 200);
   };
 
-  const handleRemoveTag = (tagIndex: number) => {
-    if (activeCase && activeCase.tags) {
-      const tagsArray = activeCase.tags
-        .replace(/[\[\]']+/g, '')
-        .split(',')
-        .map((tag) => tag.trim());
-
-      tagsArray.splice(tagIndex, 1);
-
-      const updatedTags = tagsArray.join(', ');
-      setEditedCaseData((prevData) => ({
-        ...prevData,
-        tags: updatedTags,
-      }));
-    }
-  };
-
-  const scrollToTop = () => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({ y: 0, animated: true });
-    }
-  };
-
-  const handleShowDetails = (id: number) => {
-    openCaseDetailsModal(id);
-  };
-
-  const handleEdit = (id: number) => {
-    openCaseDetailsModal(id);
-    setIsEditing(true);
+  const scrollToTop = (): void => {
+    scrollRef.current?.scrollTo({ y: 0, animated: true });
   };
 
   return (
     <View style={styles.container}>
       <ScrollView
-        ref={scrollViewRef}
+        ref={scrollRef}
         style={styles.scrollView}
-        onScroll={(event) => {
-          if (event.nativeEvent.contentOffset.y > 200) {
-            setShowScrollBtn(true);
-          } else {
-            setShowScrollBtn(false);
-          }
-        }}
         scrollEventThrottle={16}
+        onScroll={(event) => handleScroll(event.nativeEvent.contentOffset.y)}
       >
-        <DatabaseHeader count={cases.length} />
+        <DatabaseHeader count={count} />
+
         <View style={styles.infoBand}>
           <Text style={styles.infoText}>
             Tap any record to view full details. Use Edit to update tags, status, or descriptions.
           </Text>
         </View>
 
-        {cases.length === 0 ? (
+        {records.length === 0 ? (
           <EmptyState />
         ) : (
           <FlatList
-            data={cases}
-            renderItem={({ item }) => (
-              <CaseCard caseItem={item} onShowDetails={handleShowDetails} onEdit={handleEdit} />
-            )}
-            keyExtractor={(item) => item.id.toString()}
+            data={records}
+            keyExtractor={(item) => String(item.id)}
             scrollEnabled={false}
-            contentContainerStyle={styles.listContainer}
+            contentContainerStyle={styles.list}
+            renderItem={({ item }) => (
+              <CaseCard caseItem={item} onShowDetails={(id) => openRecord(id, false)} onEdit={(id) => openRecord(id, true)} />
+            )}
           />
         )}
       </ScrollView>
 
-      <ScrollToTopButton visible={showScrollBtn} onPress={scrollToTop} />
+      <ScrollToTopButton visible={showScrollTopButton} onPress={scrollToTop} />
 
       <CaseModal
-        visible={!!activeCase}
-        caseItem={activeCase}
-        isEditing={isEditing}
-        editedData={editedCaseData}
-        onClose={closeCaseDetailsModal}
-        onEditToggle={handleEditToggle}
-        onSave={handleSaveChanges}
-        onInputChange={handleInputChange}
-        onRemoveTag={handleRemoveTag}
+        visible={Boolean(selectedRecord)}
+        caseItem={selectedRecord}
+        isEditing={isEditorEnabled}
+        editedData={draftRecord}
+        onClose={closeModal}
+        onEditToggle={toggleEditor}
+        onSave={saveRecordChanges}
+        onInputChange={patchDraftValue}
+        onRemoveTag={removeTagByIndex}
       />
     </View>
   );
@@ -199,21 +166,22 @@ const styles = StyleSheet.create({
   infoBand: {
     marginHorizontal: 20,
     marginBottom: 8,
-    backgroundColor: '#0D1B31',
-    borderWidth: 1,
-    borderColor: '#25466D',
-    borderRadius: 12,
     paddingHorizontal: 10,
     paddingVertical: 9,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#25466D',
+    backgroundColor: '#0D1B31',
   },
   infoText: {
     color: '#D5E6FD',
     fontSize: 12,
     lineHeight: 17,
   },
-  listContainer: {
-    padding: 20,
+  list: {
+    paddingHorizontal: 20,
     paddingTop: 4,
+    paddingBottom: 24,
   },
 });
 

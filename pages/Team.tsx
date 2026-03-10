@@ -2,42 +2,18 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const contributors = [
-  {
-    initials: 'PM',
-    role: 'Product Operations',
-    summary: 'Coordinates release goals, scope, and delivery checkpoints.',
-  },
-  {
-    initials: 'AI',
-    role: 'AI Systems',
-    summary: 'Maintains legal response structure and model integration quality.',
-  },
-  {
-    initials: 'FE',
-    role: 'Mobile Experience',
-    summary: 'Builds interaction flows and visual behavior across screens.',
-  },
-  {
-    initials: 'BE',
-    role: 'Data & Integrations',
-    summary: 'Handles storage, contracts, and module interoperability.',
-  },
-  {
-    initials: 'QA',
-    role: 'Quality Assurance',
-    summary: 'Runs regression checks across core legal workflows.',
-  },
-  {
-    initials: 'RS',
-    role: 'Legal Research',
-    summary: 'Validates legal references and source consistency.',
-  },
+const teamMembers = [
+  { initials: 'PM', role: 'Product Operations', summary: 'Coordinates release goals, scope, and delivery checkpoints.' },
+  { initials: 'AI', role: 'AI Systems', summary: 'Maintains legal response structure and model integration quality.' },
+  { initials: 'FE', role: 'Mobile Experience', summary: 'Builds interaction flows and visual behavior across screens.' },
+  { initials: 'BE', role: 'Data & Integrations', summary: 'Handles storage, contracts, and module interoperability.' },
+  { initials: 'QA', role: 'Quality Assurance', summary: 'Runs regression checks across core legal workflows.' },
+  { initials: 'RS', role: 'Legal Research', summary: 'Validates legal references and source consistency.' },
 ];
 
 const Team: React.FC = () => {
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <LinearGradient colors={['#0A0F1D', '#17345E', '#0B4A6F']} style={styles.hero}>
         <Text style={styles.heroTag}>Contributors</Text>
         <Text style={styles.heroTitle}>LawAI Mobile Team</Text>
@@ -46,13 +22,13 @@ const Team: React.FC = () => {
         </Text>
       </LinearGradient>
 
-      <View style={styles.listWrap}>
-        {contributors.map((member) => (
-          <View key={member.initials + member.role} style={styles.memberCard}>
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>{member.initials}</Text>
+      <View style={styles.members}>
+        {teamMembers.map((member) => (
+          <View key={`${member.initials}-${member.role}`} style={styles.memberCard}>
+            <View style={styles.memberAvatar}>
+              <Text style={styles.memberAvatarText}>{member.initials}</Text>
             </View>
-            <View style={styles.memberTextWrap}>
+            <View style={styles.memberBody}>
               <Text style={styles.memberRole}>{member.role}</Text>
               <Text style={styles.memberSummary}>{member.summary}</Text>
             </View>
@@ -64,27 +40,27 @@ const Team: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
     backgroundColor: '#050A18',
   },
-  contentContainer: {
+  content: {
+    gap: 14,
     padding: 18,
     paddingBottom: 26,
-    gap: 14,
   },
   hero: {
     borderRadius: 24,
-    padding: 20,
     borderWidth: 1,
     borderColor: '#274A70',
+    padding: 20,
   },
   heroTag: {
     color: '#7DF9FF',
     fontSize: 11,
+    fontWeight: '800',
     letterSpacing: 1,
     textTransform: 'uppercase',
-    fontWeight: '800',
     marginBottom: 8,
   },
   heroTitle: {
@@ -98,20 +74,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
-  listWrap: {
+  members: {
     gap: 10,
   },
   memberCard: {
-    backgroundColor: '#101D34',
     borderRadius: 14,
     borderWidth: 1,
     borderColor: '#294569',
-    padding: 12,
+    backgroundColor: '#101D34',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 11,
+    padding: 12,
   },
-  avatar: {
+  memberAvatar: {
     width: 44,
     height: 44,
     borderRadius: 12,
@@ -119,12 +95,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  avatarText: {
+  memberAvatarText: {
     color: '#05111F',
     fontSize: 14,
     fontWeight: '800',
   },
-  memberTextWrap: {
+  memberBody: {
     flex: 1,
   },
   memberRole: {

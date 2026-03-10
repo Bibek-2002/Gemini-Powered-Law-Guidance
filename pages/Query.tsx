@@ -1,194 +1,149 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Alert, ScrollView, View, Text } from 'react-native';
-import SpeechToText from 'react-native-voice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+import React, { useMemo, useState } from 'react';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import Voice from 'react-native-voice';
 import QueryHeader from '../components/Query/QueryHeader';
 import QueryInput from '../components/Query/QueryInput';
 import QueryResponse from '../components/Query/QueryResponse';
 import SubmitButton from '../components/Query/SubmitButton';
 import CasePopup from '../components/Query/CasePopup';
 import CaseModal from '../components/Query/CaseModal';
+import { fetchLegalAnalysis, LegalResponsePayload } from '../services/geminiLegalClient';
+import { DraftCaseRecord, CaseRecord } from '../types/cases';
+import { loadCases, persistCases } from '../services/localCaseStore';
 
-const GROQ_API_KEY = "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";
-const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+const OUTPUT_PLACEHOLDER = 'Response will appear here...';
 
-interface CaseDetails {
-  caseHeading: string;
-  userQuery: string;
-  tags: string;
-  description: string;
-  caseStatus: string;
-}
+const createInitialDraft = (): DraftCaseRecord => ({
+  caseHeading: '',
+  userQuery: '',
+  tags: '',
+  description: '',
+  caseStatus: 'closed',
+});
 
-interface ResponseData {
-  acts?: Record<string, string>;
-  description?: string;
-  [key: string]: any;
-}
+const serializeActs = (acts: Record<string, string>): string => {
+  return Object.entries(acts)
+    .map(([section, reason]) => `**${section}** ${reason}`)
+    .join('\n');
+};
 
 const Query: React.FC = () => {
-  const [query, setQuery] = useState<string>('');
-  const [response, setResponse] = useState<ResponseData | string>('Response will appear here...');
-  const [isListening, setIsListening] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [showPopup, setShowPopup] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
+  const [queryText, setQueryText] = useState<string>('');
+  const [analysisResult, setAnalysisResult] = useState<LegalResponsePayload | string>(OUTPUT_PLACEHOLDER);
+  const [voiceEnabled, setVoiceEnabled] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [saveHintVisible, setSaveHintVisible] = useState<boolean>(false);
+  const [editorOpen, setEditorOpen] = useState<boolean>(false);
+  const [requestError, setRequestError] = useState<string>('');
+  const [draftCase, setDraftCase] = useState<DraftCaseRecord>(createInitialDraft());
+  const [analysisActs, setAnalysisActs] = useState<Record<string, string>>({});
 
-  const [caseDetails, setCaseDetails] = useState<CaseDetails>({
-    caseHeading: '',
-    userQuery: '',
-    tags: '',
-    description: '',
-    caseStatus: 'closed',
+  const canSubmit = useMemo(() => Boolean(queryText.trim()) && !isSubmitting, [queryText, isSubmitting]);
+
+  const toggleVoiceCapture = async (): Promise<void> => {
+    try {
+      if (voiceEnabled) {
+        await Voice.stopListening();
+      } else {
+        await Voice.startListening();
+      }
+      setVoiceEnabled((current) => !current);
+    } catch {
+      setVoiceEnabled(false);
+    }
+  };
+
+  const buildDraftFromAnalysis = (analysis: LegalResponsePayload): DraftCaseRecord => ({
+    caseHeading: 'Legal Analysis Result',
+    userQuery: queryText.trim(),
+    tags: Object.keys(analysis.acts ?? {}).join(', '),
+    description: analysis.description || 'Detailed case description here.',
+    caseStatus: 'under investigation',
   });
 
-  const handleMicClick = async (): Promise<void> => {
+  const runAnalysis = async (): Promise<void> => {
+    if (!canSubmit) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    setRequestError('');
+
     try {
-      if (isListening) {
-        await SpeechToText.stopListening();
-        setIsListening(false);
-      } else {
-        await SpeechToText.startListening();
-        setIsListening(true);
-      }
-    } catch (error) {
-      setIsListening(false);
+      const payload = await fetchLegalAnalysis(queryText.trim());
+      setAnalysisResult(payload);
+      setAnalysisActs(payload.acts ?? {});
+      setDraftCase(buildDraftFromAnalysis(payload));
+      setSaveHintVisible(true);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to process your query.';
+      setRequestError(message);
+      setAnalysisResult('');
+      setAnalysisActs({});
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleQuerySubmit = async (): Promise<void> => {
-    setIsLoading(true);
-    setError('');
-
-    try {
-      const prompt = `You are an expert Indian Legal Assistant. Analyze the following legal query and provide a response in JSON format.
-      The JSON should have two fields:
-      1. "acts": A dictionary where keys are relevant Sections/Articles of Indian Law (IPC, BNS, CrPC, etc.) and values are brief explanations of why they apply.
-      2. "description": A comprehensive summary of the legal situation and advice.
-
-      Query: ${query}
-
-      Return ONLY the JSON string.`;
-
-      const response = await axios.post(
-        GROQ_API_URL,
-        {
-          model: 'llama-3.3-70b-versatile',
-          messages: [
-            {
-              role: 'user',
-              content: prompt,
-            },
-          ],
-          max_tokens: 1024,
-          temperature: 0.7,
-          top_p: 1,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${GROQ_API_KEY.trim()}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      const text = response.data.choices[0].message.content;
-      const jsonStr = text.replace(/```json|```/g, '').trim();
-      const data: ResponseData = JSON.parse(jsonStr);
-
-      setResponse(data);
-
-      setCaseDetails({
-        caseHeading: 'Legal Analysis Result',
-        userQuery: query,
-        tags: Object.keys(data.acts || {}).join(', '),
-        description: data.description || 'Detailed case description here.',
-        caseStatus: 'under investigation',
-      });
-
-      setShowPopup(true);
-    } catch (err: any) {
-      console.error('API Error:', err);
-      console.error('Error response:', err.response?.data);
-      console.error('Error status:', err.response?.status);
-      const errorMessage = err.response?.data?.error?.message || err?.message || 'Something went wrong while fetching the response.';
-      setError(errorMessage);
-      setResponse('');
-    }
-
-    setIsLoading(false);
+  const updateDraftField = (field: string, value: string): void => {
+    setDraftCase((current) => ({
+      ...current,
+      [field]: value,
+    }));
   };
 
-  const handleSaveCase = async (): Promise<void> => {
+  const saveCaseToLocalStore = async (): Promise<void> => {
     try {
-      const storedCases = await AsyncStorage.getItem('local_cases');
-      const cases = storedCases ? JSON.parse(storedCases) : [];
-
-      const newCase = {
+      const existing = await loadCases();
+      const newCase: CaseRecord = {
         id: Date.now(),
-        caseHeading: caseDetails.caseHeading,
-        query: caseDetails.userQuery,
-        applicableArticle: caseDetails.description,
-        description: caseDetails.description,
-        status: caseDetails.caseStatus,
-        tags: caseDetails.tags,
+        caseHeading: draftCase.caseHeading,
+        query: draftCase.userQuery,
+        applicableArticle: serializeActs(analysisActs),
+        description: draftCase.description,
+        status: draftCase.caseStatus,
+        tags: draftCase.tags,
       };
 
-      const updatedCases = [newCase, ...cases];
-      await AsyncStorage.setItem('local_cases', JSON.stringify(updatedCases));
-
+      await persistCases([newCase, ...existing]);
       Alert.alert('Success', 'Case saved successfully to local storage');
-      setModalVisible(false);
-    } catch (err) {
-      console.error(err);
+      setEditorOpen(false);
+      setSaveHintVisible(false);
+    } catch {
       Alert.alert('Error', 'Failed to save case locally');
     }
   };
 
-  const handleInputChange = (key: string, value: string) => {
-    setCaseDetails({
-      ...caseDetails,
-      [key]: value,
-    });
-  };
-
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <QueryHeader />
-      <View style={styles.tipBar}>
-        <Text style={styles.tipLabel}>Tip</Text>
-        <Text style={styles.tipText}>
-          Include facts, timeline, and location for better legal section mapping.
-        </Text>
+
+      <View style={styles.noticeCard}>
+        <Text style={styles.noticeLabel}>Tip</Text>
+        <Text style={styles.noticeText}>Include facts, timeline, and location for better legal section mapping.</Text>
       </View>
+
       <View style={styles.stack}>
-        <QueryResponse response={response} isLoading={isLoading} error={error} />
+        <QueryResponse response={analysisResult} isLoading={isSubmitting} error={requestError} />
 
-        <QueryInput
-          value={query}
-          onChangeText={setQuery}
-          onMicPress={handleMicClick}
-          isListening={isListening}
-        />
+        <QueryInput value={queryText} onChangeText={setQueryText} onMicPress={toggleVoiceCapture} isListening={voiceEnabled} />
 
-        <SubmitButton onPress={handleQuerySubmit} disabled={!query.trim() || isLoading} />
+        <SubmitButton onPress={runAnalysis} disabled={!canSubmit} />
 
         <CasePopup
-          visible={showPopup}
+          visible={saveHintVisible}
           onPress={() => {
-            setShowPopup(false);
-            setModalVisible(true);
+            setSaveHintVisible(false);
+            setEditorOpen(true);
           }}
         />
 
         <CaseModal
-          visible={modalVisible}
-          caseDetails={caseDetails}
-          onClose={() => setModalVisible(false)}
-          onSave={handleSaveCase}
-          onInputChange={handleInputChange}
+          visible={editorOpen}
+          caseDetails={draftCase}
+          onClose={() => setEditorOpen(false)}
+          onSave={saveCaseToLocalStore}
+          onInputChange={updateDraftField}
         />
       </View>
     </ScrollView>
@@ -196,33 +151,34 @@ const Query: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
     backgroundColor: '#050A18',
   },
   content: {
-    padding: 18,
+    paddingHorizontal: 18,
+    paddingTop: 18,
     paddingBottom: 30,
     gap: 12,
   },
-  tipBar: {
+  noticeCard: {
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 14,
-    backgroundColor: '#0D1B31',
     borderWidth: 1,
     borderColor: '#25466D',
+    backgroundColor: '#0D1B31',
+    gap: 8,
     paddingHorizontal: 10,
     paddingVertical: 8,
-    gap: 8,
   },
-  tipLabel: {
+  noticeLabel: {
     color: '#F6A720',
     fontSize: 11,
     fontWeight: '800',
     textTransform: 'uppercase',
   },
-  tipText: {
+  noticeText: {
     flex: 1,
     color: '#CFE0F6',
     fontSize: 12,

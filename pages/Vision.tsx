@@ -5,65 +5,50 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 
-type VisionNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Vision'>;
+type VisionNavigation = NativeStackNavigationProp<RootStackParamList, 'Vision'>;
 
 const principles = [
-  {
-    title: 'Field-Ready Operation',
-    detail: 'The app should remain clear and usable in high-pressure legal workflows.',
-  },
-  {
-    title: 'Assistive, Not Replacing',
-    detail: 'AI supports legal drafting speed; final decisions stay with professionals.',
-  },
-  {
-    title: 'Persistent Case Context',
-    detail: 'Saved records should preserve continuity between queries and document work.',
-  },
-  {
-    title: 'Modular Expandability',
-    detail: 'Independent modules allow controlled growth without feature lock-in.',
-  },
+  { title: 'Field-Ready Operation', detail: 'The app should remain clear and usable in high-pressure legal workflows.' },
+  { title: 'Assistive, Not Replacing', detail: 'AI supports legal drafting speed; final decisions stay with professionals.' },
+  { title: 'Persistent Case Context', detail: 'Saved records should preserve continuity between queries and document work.' },
+  { title: 'Modular Expandability', detail: 'Independent modules allow controlled growth without feature lock-in.' },
 ];
 
 const Vision: React.FC = () => {
-  const navigation = useNavigation<VisionNavigationProp>();
+  const navigation = useNavigation<VisionNavigation>();
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <LinearGradient colors={['#0A0F1D', '#1B3B67', '#0A596E']} style={styles.header}>
         <Text style={styles.headerTag}>Vision</Text>
         <Text style={styles.headerTitle}>Practical Legal Workflow Platform</Text>
-        <Text style={styles.headerSubtitle}>
-          LawAI Mobile focuses on real productivity and traceable legal operations.
-        </Text>
+        <Text style={styles.headerSubtitle}>LawAI Mobile focuses on real productivity and traceable legal operations.</Text>
       </LinearGradient>
 
-      <View style={styles.manifestoCard}>
-        <Text style={styles.manifestoTitle}>Direction</Text>
-        <Text style={styles.manifestoText}>
-          Reduce repetitive legal drafting effort while preserving accuracy, accountability, and
-          structured case memory.
+      <View style={styles.directionCard}>
+        <Text style={styles.directionTitle}>Direction</Text>
+        <Text style={styles.directionText}>
+          Reduce repetitive legal drafting effort while preserving accuracy, accountability, and structured case memory.
         </Text>
       </View>
 
-      <View style={styles.principlesWrap}>
-        {principles.map((item, index) => (
-          <View key={item.title} style={styles.principleCard}>
+      <View style={styles.principles}>
+        {principles.map((principle, index) => (
+          <View key={principle.title} style={styles.principleCard}>
             <Text style={styles.principleIndex}>0{index + 1}</Text>
-            <View style={styles.principleTextWrap}>
-              <Text style={styles.principleTitle}>{item.title}</Text>
-              <Text style={styles.principleDetail}>{item.detail}</Text>
+            <View style={styles.principleBody}>
+              <Text style={styles.principleTitle}>{principle.title}</Text>
+              <Text style={styles.principleText}>{principle.detail}</Text>
             </View>
           </View>
         ))}
       </View>
 
-      <View style={styles.actionRow}>
-        <TouchableOpacity style={[styles.actionBtn, styles.primary]} onPress={() => navigation.navigate('Key Features')}>
+      <View style={styles.actions}>
+        <TouchableOpacity style={[styles.actionButton, styles.primaryAction]} onPress={() => navigation.navigate('Key Features')}>
           <Text style={styles.primaryText}>View Features</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.actionBtn, styles.secondary]} onPress={() => navigation.navigate('Utilities')}>
+        <TouchableOpacity style={[styles.actionButton, styles.secondaryAction]} onPress={() => navigation.navigate('Utilities')}>
           <Text style={styles.secondaryText}>Open Workspace</Text>
         </TouchableOpacity>
       </View>
@@ -72,27 +57,27 @@ const Vision: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
     backgroundColor: '#050A18',
   },
-  contentContainer: {
+  content: {
+    gap: 14,
     padding: 18,
     paddingBottom: 26,
-    gap: 14,
   },
   header: {
     borderRadius: 24,
-    padding: 20,
     borderWidth: 1,
     borderColor: '#26486D',
+    padding: 20,
   },
   headerTag: {
     color: '#7DF9FF',
     fontSize: 11,
+    fontWeight: '800',
     letterSpacing: 1,
     textTransform: 'uppercase',
-    fontWeight: '800',
     marginBottom: 8,
   },
   headerTitle: {
@@ -107,37 +92,37 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
-  manifestoCard: {
-    backgroundColor: '#0D1B31',
+  directionCard: {
     borderRadius: 16,
     borderWidth: 1,
     borderColor: '#26486D',
+    backgroundColor: '#0D1B31',
     padding: 15,
   },
-  manifestoTitle: {
+  directionTitle: {
     color: '#F6A720',
     fontSize: 13,
     fontWeight: '800',
-    textTransform: 'uppercase',
     letterSpacing: 0.8,
+    textTransform: 'uppercase',
     marginBottom: 6,
   },
-  manifestoText: {
+  directionText: {
     color: '#D7E7FF',
     fontSize: 13,
     lineHeight: 19,
   },
-  principlesWrap: {
+  principles: {
     gap: 10,
   },
   principleCard: {
     flexDirection: 'row',
-    backgroundColor: '#101D34',
     borderRadius: 14,
     borderWidth: 1,
     borderColor: '#294569',
-    padding: 13,
+    backgroundColor: '#101D34',
     gap: 11,
+    padding: 13,
   },
   principleIndex: {
     color: '#7DF9FF',
@@ -145,7 +130,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     marginTop: 1,
   },
-  principleTextWrap: {
+  principleBody: {
     flex: 1,
   },
   principleTitle: {
@@ -154,29 +139,29 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: 4,
   },
-  principleDetail: {
+  principleText: {
     color: '#9DB3D0',
     fontSize: 12,
     lineHeight: 18,
   },
-  actionRow: {
+  actions: {
     flexDirection: 'row',
     gap: 10,
   },
-  actionBtn: {
+  actionButton: {
     flex: 1,
-    borderRadius: 12,
     minHeight: 44,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  primary: {
+  primaryAction: {
     backgroundColor: '#7DF9FF',
   },
-  secondary: {
-    backgroundColor: '#101D34',
+  secondaryAction: {
     borderWidth: 1,
     borderColor: '#294569',
+    backgroundColor: '#101D34',
   },
   primaryText: {
     color: '#05111F',

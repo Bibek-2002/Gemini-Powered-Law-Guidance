@@ -6,45 +6,27 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 
-type LandingNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
+type HomeNavigation = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
-const launchItems: Array<{
+interface LaunchCardItem {
   label: string;
   detail: string;
   icon: keyof typeof Ionicons.glyphMap;
   target: keyof RootStackParamList;
-}> = [
-  {
-    label: 'Query Engine',
-    detail: 'Analyze legal issues and map acts',
-    icon: 'chatbox-ellipses',
-    target: 'Query',
-  },
-  {
-    label: 'Case Vault',
-    detail: 'Review and edit saved records',
-    icon: 'archive',
-    target: 'Database',
-  },
-  {
-    label: 'Bare Acts',
-    detail: 'Read sections in searchable format',
-    icon: 'library',
-    target: 'Bare Acts',
-  },
-  {
-    label: 'FIR Studio',
-    detail: 'Create and export FIR reports',
-    icon: 'document-text',
-    target: 'FIR Download',
-  },
+}
+
+const quickLaunchItems: LaunchCardItem[] = [
+  { label: 'Query Engine', detail: 'Analyze legal issues and map acts', icon: 'chatbox-ellipses', target: 'Query' },
+  { label: 'Case Vault', detail: 'Review and edit saved records', icon: 'archive', target: 'Database' },
+  { label: 'Bare Acts', detail: 'Read sections in searchable format', icon: 'library', target: 'Bare Acts' },
+  { label: 'FIR Studio', detail: 'Create and export FIR reports', icon: 'document-text', target: 'FIR Download' },
 ];
 
 const Landing: React.FC = () => {
-  const navigation = useNavigation<LandingNavigationProp>();
+  const navigation = useNavigation<HomeNavigation>();
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <LinearGradient colors={['#0A0F1D', '#11284A', '#0E7490']} style={styles.hero}>
         <Text style={styles.badge}>LawAI Mobile</Text>
         <Text style={styles.title}>Legal Command Deck</Text>
@@ -52,81 +34,76 @@ const Landing: React.FC = () => {
           A redesigned workflow app for legal drafting, research, records, and FIR generation.
         </Text>
 
-        <View style={styles.heroActions}>
-          <TouchableOpacity style={styles.primaryAction} onPress={() => navigation.navigate('Utilities')}>
+        <View style={styles.heroButtons}>
+          <TouchableOpacity style={styles.primaryButton} onPress={() => navigation.navigate('Utilities')}>
             <Ionicons name="apps" size={16} color="#05111F" />
-            <Text style={styles.primaryActionText}>Open Workspace</Text>
+            <Text style={styles.primaryText}>Open Workspace</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.secondaryAction} onPress={() => navigation.navigate('Vision')}>
-            <Text style={styles.secondaryActionText}>Vision</Text>
+          <TouchableOpacity style={styles.secondaryButton} onPress={() => navigation.navigate('Vision')}>
+            <Text style={styles.secondaryText}>Vision</Text>
           </TouchableOpacity>
         </View>
       </LinearGradient>
 
-      <View style={styles.panel}>
-        <View style={styles.panelHeader}>
-          <Text style={styles.panelTitle}>Quick Launch</Text>
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Quick Launch</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Key Features')}>
-            <Text style={styles.panelLink}>All Features</Text>
+            <Text style={styles.sectionLink}>All Features</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.launchGrid}>
-          {launchItems.map((item) => (
-            <TouchableOpacity
-              key={item.label}
-              style={styles.launchCard}
-              activeOpacity={0.88}
-              onPress={() => navigation.navigate(item.target)}
-            >
-              <View style={styles.launchIcon}>
+        <View style={styles.grid}>
+          {quickLaunchItems.map((item) => (
+            <TouchableOpacity key={item.label} style={styles.card} onPress={() => navigation.navigate(item.target)}>
+              <View style={styles.cardIcon}>
                 <Ionicons name={item.icon} size={18} color="#7DF9FF" />
               </View>
-              <Text style={styles.launchLabel}>{item.label}</Text>
-              <Text style={styles.launchDetail}>{item.detail}</Text>
+              <Text style={styles.cardTitle}>{item.label}</Text>
+              <Text style={styles.cardSubtitle}>{item.detail}</Text>
             </TouchableOpacity>
           ))}
         </View>
       </View>
 
-      <View style={styles.noteCard}>
-        <Text style={styles.noteTitle}>Workflow Sequence</Text>
-        <Text style={styles.noteLine}>1. Use Query Engine for legal reasoning output.</Text>
-        <Text style={styles.noteLine}>2. Save important responses to Case Vault.</Text>
-        <Text style={styles.noteLine}>3. Continue with Bare Acts and FIR Studio modules.</Text>
+      <View style={styles.notes}>
+        <Text style={styles.notesTitle}>Workflow Sequence</Text>
+        <Text style={styles.notesText}>1. Use Query Engine for legal reasoning output.</Text>
+        <Text style={styles.notesText}>2. Save important responses to Case Vault.</Text>
+        <Text style={styles.notesText}>3. Continue with Bare Acts and FIR Studio modules.</Text>
       </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
     backgroundColor: '#050A18',
   },
   content: {
+    gap: 14,
     padding: 18,
     paddingBottom: 28,
-    gap: 14,
   },
   hero: {
     borderRadius: 28,
-    padding: 20,
     borderWidth: 1,
     borderColor: '#22406B',
     gap: 10,
+    padding: 20,
   },
   badge: {
     alignSelf: 'flex-start',
-    backgroundColor: '#1A3557',
     borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    backgroundColor: '#1A3557',
     color: '#7DF9FF',
-    textTransform: 'uppercase',
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 0.9,
+    textTransform: 'uppercase',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
   },
   title: {
     color: '#E6F4FF',
@@ -139,12 +116,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
-  heroActions: {
+  heroButtons: {
     flexDirection: 'row',
     gap: 8,
     marginTop: 4,
   },
-  primaryAction: {
+  primaryButton: {
     flex: 1,
     minHeight: 46,
     borderRadius: 12,
@@ -154,7 +131,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
   },
-  secondaryAction: {
+  secondaryButton: {
     flex: 0.55,
     minHeight: 46,
     borderRadius: 12,
@@ -164,57 +141,57 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgba(8, 21, 39, 0.45)',
   },
-  primaryActionText: {
+  primaryText: {
     color: '#05111F',
     fontSize: 13,
     fontWeight: '800',
   },
-  secondaryActionText: {
+  secondaryText: {
     color: '#BDEBFF',
     fontSize: 13,
     fontWeight: '700',
   },
-  panel: {
-    backgroundColor: '#0C1427',
+  section: {
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#1E3255',
-    padding: 14,
+    backgroundColor: '#0C1427',
     gap: 10,
+    padding: 14,
   },
-  panelHeader: {
+  sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  panelTitle: {
+  sectionTitle: {
     color: '#DDEAFF',
     fontSize: 16,
     fontWeight: '800',
   },
-  panelLink: {
+  sectionLink: {
     color: '#7DF9FF',
     fontSize: 12,
     fontWeight: '700',
-    textTransform: 'uppercase',
     letterSpacing: 0.6,
+    textTransform: 'uppercase',
   },
-  launchGrid: {
+  grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     rowGap: 10,
   },
-  launchCard: {
+  card: {
     width: '48%',
     borderRadius: 14,
     borderWidth: 1,
     borderColor: '#2C4468',
     backgroundColor: '#111D34',
-    padding: 12,
     gap: 5,
+    padding: 12,
   },
-  launchIcon: {
+  cardIcon: {
     width: 30,
     height: 30,
     borderRadius: 9,
@@ -223,33 +200,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 2,
   },
-  launchLabel: {
+  cardTitle: {
     color: '#ECF3FF',
     fontSize: 13,
     fontWeight: '700',
   },
-  launchDetail: {
+  cardSubtitle: {
     color: '#9EB3D1',
     fontSize: 11,
     lineHeight: 16,
   },
-  noteCard: {
-    backgroundColor: '#102038',
+  notes: {
     borderRadius: 16,
     borderWidth: 1,
     borderColor: '#2E4B71',
-    padding: 13,
+    backgroundColor: '#102038',
     gap: 5,
+    padding: 13,
   },
-  noteTitle: {
+  notesTitle: {
     color: '#7DF9FF',
     fontSize: 13,
     fontWeight: '800',
-    textTransform: 'uppercase',
     letterSpacing: 0.8,
+    textTransform: 'uppercase',
     marginBottom: 1,
   },
-  noteLine: {
+  notesText: {
     color: '#D4E2F7',
     fontSize: 12,
     lineHeight: 18,

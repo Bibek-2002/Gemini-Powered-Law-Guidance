@@ -18,19 +18,21 @@ const QueryInput: React.FC<QueryInputProps> = ({
   placeholder = 'Describe legal issue, facts, and expected help...',
 }) => {
   return (
-    <View style={styles.box}>
+    <View style={styles.container}>
       <Text style={styles.label}>Input Query</Text>
-      <View style={styles.row}>
+      <View style={styles.inputRow}>
         <TextInput
           style={styles.input}
+          multiline
           placeholder={placeholder}
           placeholderTextColor="#7993B5"
+          textAlignVertical="top"
           value={value}
           onChangeText={onChangeText}
-          multiline
         />
+
         <TouchableOpacity
-          style={[styles.mic, isListening && styles.micActive]}
+          style={[styles.micButton, isListening && styles.micButtonActive]}
           onPress={onMicPress}
           activeOpacity={0.85}
         >
@@ -42,22 +44,22 @@ const QueryInput: React.FC<QueryInputProps> = ({
 };
 
 const styles = StyleSheet.create({
-  box: {
-    backgroundColor: '#101D34',
+  container: {
     borderRadius: 14,
     borderWidth: 1,
     borderColor: '#294569',
-    padding: 12,
+    backgroundColor: '#101D34',
     gap: 8,
+    padding: 12,
   },
   label: {
     color: '#A8C0DD',
     fontSize: 12,
     fontWeight: '700',
-    textTransform: 'uppercase',
     letterSpacing: 0.8,
+    textTransform: 'uppercase',
   },
-  row: {
+  inputRow: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     gap: 10,
@@ -65,18 +67,17 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     minHeight: 102,
-    backgroundColor: '#0A162A',
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#2B4B74',
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    backgroundColor: '#0A162A',
     color: '#EAF2FF',
     fontSize: 14,
-    textAlignVertical: 'top',
     lineHeight: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
   },
-  mic: {
+  micButton: {
     width: 46,
     height: 46,
     borderRadius: 13,
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  micActive: {
+  micButtonActive: {
     backgroundColor: '#F87171',
   },
 });

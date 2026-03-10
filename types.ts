@@ -16,3 +16,5 @@ export type RootStackParamList = {
   'Key Features': undefined;
   NotFound: undefined;
 };
+
+export type RootScreenName = keyof RootStackParamList;

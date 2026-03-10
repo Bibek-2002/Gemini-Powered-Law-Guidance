@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const terms = [
+const termsSections = [
   {
     title: '1. Acceptable Use',
     text: 'Use the platform only for lawful legal-assistance and documentation workflows.',
@@ -27,20 +27,18 @@ const terms = [
 
 const TermsAndConditions: React.FC = () => {
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
-      <LinearGradient colors={['#0A0F1D', '#16345D', '#0B4A6F']} style={styles.header}>
-        <Text style={styles.headerTag}>Legal</Text>
-        <Text style={styles.headerTitle}>Terms and Conditions</Text>
-        <Text style={styles.headerSubtitle}>
-          Baseline usage terms for all operational modules.
-        </Text>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <LinearGradient colors={['#0A0F1D', '#16345D', '#0B4A6F']} style={styles.hero}>
+        <Text style={styles.heroTag}>Legal</Text>
+        <Text style={styles.heroTitle}>Terms and Conditions</Text>
+        <Text style={styles.heroSubtitle}>Baseline usage terms for all operational modules.</Text>
       </LinearGradient>
 
-      <View style={styles.listWrap}>
-        {terms.map((item) => (
-          <View key={item.title} style={styles.termCard}>
-            <Text style={styles.termTitle}>{item.title}</Text>
-            <Text style={styles.termText}>{item.text}</Text>
+      <View style={styles.sectionList}>
+        {termsSections.map((section) => (
+          <View key={section.title} style={styles.sectionCard}>
+            <Text style={styles.sectionTitle}>{section.title}</Text>
+            <Text style={styles.sectionText}>{section.text}</Text>
           </View>
         ))}
       </View>
@@ -49,57 +47,57 @@ const TermsAndConditions: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
     backgroundColor: '#050A18',
   },
-  contentContainer: {
+  content: {
+    gap: 14,
     padding: 18,
     paddingBottom: 26,
-    gap: 14,
   },
-  header: {
+  hero: {
     borderRadius: 24,
-    padding: 20,
     borderWidth: 1,
     borderColor: '#26486D',
+    padding: 20,
   },
-  headerTag: {
+  heroTag: {
     color: '#7DF9FF',
     fontSize: 11,
+    fontWeight: '800',
     letterSpacing: 1,
     textTransform: 'uppercase',
-    fontWeight: '800',
     marginBottom: 8,
   },
-  headerTitle: {
+  heroTitle: {
     color: '#EAF4FF',
     fontSize: 27,
     fontWeight: '800',
     marginBottom: 8,
   },
-  headerSubtitle: {
+  heroSubtitle: {
     color: '#A8C0DD',
     fontSize: 14,
     lineHeight: 20,
   },
-  listWrap: {
+  sectionList: {
     gap: 10,
   },
-  termCard: {
-    backgroundColor: '#101D34',
+  sectionCard: {
     borderRadius: 14,
     borderWidth: 1,
     borderColor: '#294569',
+    backgroundColor: '#101D34',
     padding: 13,
   },
-  termTitle: {
+  sectionTitle: {
     color: '#EAF2FF',
     fontSize: 14,
     fontWeight: '700',
     marginBottom: 5,
   },
-  termText: {
+  sectionText: {
     color: '#9FB4D1',
     fontSize: 12,
     lineHeight: 18,

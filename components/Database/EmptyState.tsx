@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface EmptyStateProps {
@@ -25,8 +25,8 @@ const EmptyState: React.FC<EmptyStateProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 60,
   },
   content: {
@@ -34,15 +34,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   message: {
+    color: '#EAF3FF',
     fontSize: 19,
     fontWeight: '700',
-    color: '#EAF3FF',
     textAlign: 'center',
     marginBottom: 8,
   },
   subMessage: {
-    fontSize: 14,
     color: '#9FB4D1',
+    fontSize: 14,
     textAlign: 'center',
     lineHeight: 20,
   },

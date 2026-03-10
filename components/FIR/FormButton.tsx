@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface FormButtonProps {
@@ -20,42 +20,33 @@ const FormButton: React.FC<FormButtonProps> = ({
   backgroundColor = '#7DF9FF',
 }) => {
   return (
-    <TouchableOpacity
-      style={[styles.button, isLoading && styles.buttonDisabled]}
-      onPress={onPress}
-      disabled={isLoading}
-      activeOpacity={0.85}
-    >
-      <View style={[styles.buttonContent, { backgroundColor }]}>
-        {isLoading ? (
-          <ActivityIndicator color="#05111F" size="small" />
-        ) : (
-          <Ionicons name={iconName} size={18} color="#05111F" />
-        )}
-        <Text style={styles.buttonText}>{isLoading ? loadingTitle : title}</Text>
+    <TouchableOpacity style={[styles.container, isLoading && styles.disabled]} onPress={onPress} disabled={isLoading} activeOpacity={0.85}>
+      <View style={[styles.content, { backgroundColor }]}> 
+        {isLoading ? <ActivityIndicator color="#05111F" size="small" /> : <Ionicons name={iconName} size={18} color="#05111F" />}
+        <Text style={styles.text}>{isLoading ? loadingTitle : title}</Text>
       </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
+  container: {
     borderRadius: 11,
     overflow: 'hidden',
     marginTop: 8,
   },
-  buttonDisabled: {
+  disabled: {
     opacity: 0.65,
   },
-  buttonContent: {
+  content: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 14,
-    paddingHorizontal: 20,
     gap: 7,
+    paddingHorizontal: 20,
+    paddingVertical: 14,
   },
-  buttonText: {
+  text: {
     color: '#05111F',
     fontSize: 13,
     fontWeight: '800',

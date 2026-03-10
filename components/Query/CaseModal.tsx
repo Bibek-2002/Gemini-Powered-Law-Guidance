@@ -1,74 +1,58 @@
 import React from 'react';
-import { View, Text, TextInput, Modal, TouchableOpacity, StyleSheet } from 'react-native';
+import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
-interface CaseDetails {
-  caseHeading: string;
-  userQuery: string;
-  tags: string;
-  description: string;
-  caseStatus: string;
-}
+import { DraftCaseRecord } from '../../types/cases';
 
 interface CaseModalProps {
   visible: boolean;
-  caseDetails: CaseDetails;
+  caseDetails: DraftCaseRecord;
   onClose: () => void;
   onSave: () => void;
   onInputChange: (key: string, value: string) => void;
 }
 
-const CaseModal: React.FC<CaseModalProps> = ({
-  visible,
-  caseDetails,
-  onClose,
-  onSave,
-  onInputChange
-}) => {
-  const fields = [
-    ['Case Heading', 'caseHeading'],
-    ['User Query', 'userQuery'],
-    ['Tags', 'tags'],
-    ['Description', 'description'],
-    ['Case Status', 'caseStatus'],
-  ];
+const formFields: Array<{ label: string; key: keyof DraftCaseRecord; multiline?: boolean }> = [
+  { label: 'Case Heading', key: 'caseHeading' },
+  { label: 'User Query', key: 'userQuery' },
+  { label: 'Tags', key: 'tags' },
+  { label: 'Description', key: 'description', multiline: true },
+  { label: 'Case Status', key: 'caseStatus' },
+];
 
+const CaseModal: React.FC<CaseModalProps> = ({ visible, caseDetails, onClose, onSave, onInputChange }) => {
   return (
-    <Modal visible={visible} transparent animationType="slide">
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.overlay}>
-        <View style={styles.modalContent}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Case Details</Text>
+        <View style={styles.modal}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Case Details</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color="#6B7280" />
             </TouchableOpacity>
           </View>
 
-          {fields.map(([label, key]) => (
-            <View key={key} style={styles.inputGroup}>
-              <Text style={styles.label}>{label}</Text>
+          {formFields.map((field) => (
+            <View key={field.key} style={styles.fieldGroup}>
+              <Text style={styles.label}>{field.label}</Text>
               <TextInput
-                style={[
-                  styles.input,
-                  key === 'description' && styles.textArea,
-                ]}
-                multiline={key === 'description'}
-                value={caseDetails[key as keyof CaseDetails]}
-                onChangeText={(text) => onInputChange(key, text)}
-                placeholder={`Enter ${label.toLowerCase()}`}
+                style={[styles.input, field.multiline && styles.textArea]}
+                value={caseDetails[field.key]}
+                onChangeText={(text) => onInputChange(field.key, text)}
+                multiline={field.multiline}
+                placeholder={`Enter ${field.label.toLowerCase()}`}
                 placeholderTextColor="#7993B5"
               />
             </View>
           ))}
 
-          <View style={styles.buttonContainer}>
+          <View style={styles.actions}>
             <TouchableOpacity style={styles.saveButton} onPress={onSave}>
               <Ionicons name="save" size={20} color="#05111F" />
-              <Text style={styles.saveText}>Save Case</Text>
+              <Text style={styles.saveButtonText}>Save Case</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-              <Text style={styles.cancelText}>Cancel</Text>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -80,80 +64,80 @@ const CaseModal: React.FC<CaseModalProps> = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(4, 10, 24, 0.72)',
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(4, 10, 24, 0.72)',
   },
-  modalContent: {
-    backgroundColor: '#101D34',
-    borderRadius: 16,
-    padding: 20,
+  modal: {
     width: '90%',
     maxHeight: '80%',
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: '#294569',
+    backgroundColor: '#101D34',
+    padding: 20,
   },
-  modalHeader: {
+  header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
   },
-  modalTitle: {
+  title: {
+    color: '#EAF3FF',
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#EAF3FF',
   },
   closeButton: {
     padding: 4,
   },
-  inputGroup: {
+  fieldGroup: {
     marginBottom: 16,
   },
   label: {
+    color: '#A8C0DD',
     fontSize: 16,
     fontWeight: '600',
-    color: '#A8C0DD',
     marginBottom: 8,
   },
   input: {
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: '#294569',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
     backgroundColor: '#0A162A',
     color: '#EAF3FF',
+    fontSize: 16,
+    padding: 12,
   },
   textArea: {
     height: 90,
     textAlignVertical: 'top',
   },
-  buttonContainer: {
+  actions: {
     marginTop: 20,
   },
   saveButton: {
-    backgroundColor: '#7DF9FF',
     borderRadius: 8,
-    padding: 12,
+    backgroundColor: '#7DF9FF',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
+    padding: 12,
   },
-  saveText: {
+  saveButtonText: {
     color: '#05111F',
     fontSize: 16,
     fontWeight: '600',
     marginLeft: 8,
   },
   cancelButton: {
-    backgroundColor: '#1A2E4C',
     borderRadius: 8,
-    padding: 12,
+    backgroundColor: '#1A2E4C',
     alignItems: 'center',
+    padding: 12,
   },
-  cancelText: {
+  cancelButtonText: {
     color: '#C8DCF8',
     fontSize: 16,
     fontWeight: '600',
@@ -161,6 +145,3 @@ const styles = StyleSheet.create({
 });
 
 export default CaseModal;
-
-
-

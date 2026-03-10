@@ -3,64 +3,66 @@ import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'r
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
+const APK_URL = 'https://drive.google.com/uc?export=download&id=1lPszpovE10_TFEdpZn9Ufbg13sfMSxAz';
+
 const Download: React.FC = () => {
-  const handleAndroidDownload = () => {
-    Linking.openURL('https://drive.google.com/uc?export=download&id=1lPszpovE10_TFEdpZn9Ufbg13sfMSxAz');
+  const openAndroidDownload = (): void => {
+    Linking.openURL(APK_URL);
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <LinearGradient colors={['#0A0F1D', '#17345E', '#0B4A6F']} style={styles.hero}>
-        <Text style={styles.heroTag}>Install</Text>
+        <Text style={styles.heroLabel}>Install</Text>
         <Text style={styles.heroTitle}>Get LawAI Mobile</Text>
         <Text style={styles.heroSubtitle}>
           Download the latest Android package for full access to all legal workflow modules.
         </Text>
       </LinearGradient>
 
-      <TouchableOpacity style={styles.primaryCard} onPress={handleAndroidDownload} activeOpacity={0.88}>
-        <View style={styles.iconWrap}>
+      <TouchableOpacity style={styles.platformCard} onPress={openAndroidDownload}>
+        <View style={styles.platformIcon}>
           <Ionicons name="logo-android" size={24} color="#05111F" />
         </View>
-        <View style={styles.textWrap}>
+        <View style={styles.platformCopy}>
           <Text style={styles.platformTitle}>Android Package</Text>
           <Text style={styles.platformSubtitle}>Direct APK delivery</Text>
         </View>
         <Ionicons name="download" size={20} color="#7DF9FF" />
       </TouchableOpacity>
 
-      <View style={styles.secondaryCard}>
-        <Text style={styles.secondaryTitle}>Release Notes</Text>
-        <Text style={styles.secondaryItem}>- Complete interface redesign</Text>
-        <Text style={styles.secondaryItem}>- Core legal modules preserved</Text>
-        <Text style={styles.secondaryItem}>- Streamlined navigation structure</Text>
+      <View style={styles.notesCard}>
+        <Text style={styles.notesTitle}>Release Notes</Text>
+        <Text style={styles.notesText}>- Complete interface redesign</Text>
+        <Text style={styles.notesText}>- Core legal modules preserved</Text>
+        <Text style={styles.notesText}>- Streamlined navigation structure</Text>
       </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
     backgroundColor: '#050A18',
   },
-  contentContainer: {
+  content: {
+    gap: 14,
     padding: 18,
     paddingBottom: 26,
-    gap: 14,
   },
   hero: {
     borderRadius: 24,
-    padding: 20,
     borderWidth: 1,
     borderColor: '#26486D',
+    padding: 20,
   },
-  heroTag: {
+  heroLabel: {
     color: '#7DF9FF',
     fontSize: 11,
+    fontWeight: '800',
     letterSpacing: 1,
     textTransform: 'uppercase',
-    fontWeight: '800',
     marginBottom: 8,
   },
   heroTitle: {
@@ -74,17 +76,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
-  primaryCard: {
-    backgroundColor: '#101D34',
+  platformCard: {
     borderRadius: 14,
     borderWidth: 1,
     borderColor: '#294569',
-    padding: 14,
+    backgroundColor: '#101D34',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+    padding: 14,
   },
-  iconWrap: {
+  platformIcon: {
     width: 42,
     height: 42,
     borderRadius: 10,
@@ -92,7 +94,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  textWrap: {
+  platformCopy: {
     flex: 1,
   },
   platformTitle: {
@@ -105,23 +107,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
-  secondaryCard: {
-    backgroundColor: '#0D1B31',
+  notesCard: {
     borderRadius: 14,
     borderWidth: 1,
     borderColor: '#24466E',
-    padding: 14,
+    backgroundColor: '#0D1B31',
     gap: 5,
+    padding: 14,
   },
-  secondaryTitle: {
+  notesTitle: {
     color: '#F6A720',
     fontSize: 13,
     fontWeight: '800',
-    textTransform: 'uppercase',
     letterSpacing: 0.7,
+    textTransform: 'uppercase',
     marginBottom: 3,
   },
-  secondaryItem: {
+  notesText: {
     color: '#D5E6FD',
     fontSize: 13,
     lineHeight: 18,

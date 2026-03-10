@@ -14,7 +14,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   disabled = false,
 }) => {
   return (
-    <TouchableOpacity style={[styles.wrap, disabled && styles.disabled]} onPress={onPress} disabled={disabled}>
+    <TouchableOpacity style={[styles.button, disabled && styles.buttonDisabled]} onPress={onPress} disabled={disabled}>
       <View style={styles.content}>
         <Ionicons name="flash" size={17} color="#05111F" />
         <Text style={styles.text}>{title}</Text>
@@ -24,9 +24,12 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
 };
 
 const styles = StyleSheet.create({
-  wrap: {
+  button: {
     borderRadius: 12,
     backgroundColor: '#7DF9FF',
+  },
+  buttonDisabled: {
+    opacity: 0.45,
   },
   content: {
     minHeight: 48,
@@ -39,9 +42,6 @@ const styles = StyleSheet.create({
     color: '#05111F',
     fontSize: 14,
     fontWeight: '800',
-  },
-  disabled: {
-    opacity: 0.45,
   },
 });
 

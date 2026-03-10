@@ -12,7 +12,7 @@ const QueryHeader: React.FC<QueryHeaderProps> = ({
   subtitle = 'Analyze legal scenarios and convert output into case entries',
 }) => {
   return (
-    <View style={styles.wrap}>
+    <View style={styles.container}>
       <View style={styles.badge}>
         <Ionicons name="sparkles" size={14} color="#05111F" />
         <Text style={styles.badgeText}>Live Assistant</Text>
@@ -24,30 +24,30 @@ const QueryHeader: React.FC<QueryHeaderProps> = ({
 };
 
 const styles = StyleSheet.create({
-  wrap: {
-    backgroundColor: '#101D34',
+  container: {
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#294569',
-    padding: 15,
+    backgroundColor: '#101D34',
     gap: 8,
+    padding: 15,
   },
   badge: {
     alignSelf: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#7DF9FF',
     borderRadius: 999,
+    backgroundColor: '#7DF9FF',
+    gap: 5,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    gap: 5,
   },
   badgeText: {
     color: '#05111F',
     fontSize: 11,
     fontWeight: '800',
-    textTransform: 'uppercase',
     letterSpacing: 0.7,
+    textTransform: 'uppercase',
   },
   title: {
     color: '#EAF4FF',

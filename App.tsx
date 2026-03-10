@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, Text, StyleSheet } from 'react-native';
-import { RootStackParamList } from './types';
+import { StyleSheet, Text, View } from 'react-native';
+import { RootStackParamList, RootScreenName } from './types';
 import Landing from './pages/Landing';
 import Database from './pages/Database';
 import Query from './pages/Query';
@@ -14,13 +14,34 @@ import Accessibility from './pages/Accessibility';
 import TermsAndConditions from './pages/TermsAndConditions';
 import FIRDownload from './pages/FIRDownload';
 import UtilityPage from './pages/UtilityPage';
-import OriginalDocuments from './pages/OriginalDocuments'; // Import from /pages
-import OfficialFIRFormat from './pages/OfficialFIRFormat'; // Import from /pages
+import OriginalDocuments from './pages/OriginalDocuments';
+import OfficialFIRFormat from './pages/OfficialFIRFormat';
 import KeyFeatures from './pages/KeyFeatures';
 import Vision from './pages/Vision';
 
-// Create the stack navigator
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+const routes: Array<{
+  name: RootScreenName;
+  component: React.ComponentType;
+}> = [
+  { name: 'Home', component: Landing },
+  { name: 'Database', component: Database },
+  { name: 'Query', component: Query },
+  { name: 'Bare Acts', component: BareActs },
+  { name: 'Download', component: Download },
+  { name: 'Team', component: Team },
+  { name: 'Privacy Policy', component: PrivacyPolicy },
+  { name: 'Accessibility', component: Accessibility },
+  { name: 'Terms', component: TermsAndConditions },
+  { name: 'FIR Download', component: FIRDownload },
+  { name: 'Utilities', component: UtilityPage },
+  { name: 'Original Documents', component: OriginalDocuments },
+  { name: 'Official FIR Format', component: OfficialFIRFormat },
+  { name: 'Vision', component: Vision },
+  { name: 'Key Features', component: KeyFeatures },
+  { name: 'NotFound', component: NotFoundScreen },
+];
 
 function App() {
   return (
@@ -33,55 +54,46 @@ function App() {
           contentStyle: { backgroundColor: '#050A18' },
         }}
       >
-        <Stack.Screen name="Home" component={Landing} />
-        <Stack.Screen name="Database" component={Database} />
-        <Stack.Screen name="Query" component={Query} />
-        <Stack.Screen name="Bare Acts" component={BareActs} />
-        <Stack.Screen name="Download" component={Download} />
-        <Stack.Screen name="Team" component={Team} />
-        <Stack.Screen name="Privacy Policy" component={PrivacyPolicy} />
-        <Stack.Screen name="Accessibility" component={Accessibility} />
-        <Stack.Screen name="Terms" component={TermsAndConditions} />
-        <Stack.Screen name="FIR Download" component={FIRDownload} />
-        <Stack.Screen name="Utilities" component={UtilityPage} />
-        <Stack.Screen name="Original Documents" component={OriginalDocuments} />
-        <Stack.Screen name="Official FIR Format" component={OfficialFIRFormat} />
-        <Stack.Screen name="Vision" component={Vision} />
-        <Stack.Screen name="Key Features" component={KeyFeatures} />
-        {/* If you want to add a fallback, do it as below */}
-        <Stack.Screen
-          name="NotFound"
-          component={NotFound}
-          options={{ title: '404 Not Found' }}
-        />
+        {routes.map((route) => (
+          <Stack.Screen
+            key={route.name}
+            name={route.name}
+            component={route.component}
+            options={route.name === 'NotFound' ? { title: '404 Not Found' } : undefined}
+          />
+        ))}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-// "NotFound" screen to display a 404 error message
-function NotFound() {
+function NotFoundScreen() {
   return (
     <View style={styles.notFoundContainer}>
-      <Text style={styles.notFoundText}>404: Page Not Found</Text>
+      <Text style={styles.notFoundTitle}>404</Text>
+      <Text style={styles.notFoundText}>Page not found</Text>
     </View>
   );
 }
 
-// Styling for the NotFound screen
 const styles = StyleSheet.create({
   notFoundContainer: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5', // Light background for the NotFound screen
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#050A18',
+  },
+  notFoundTitle: {
+    color: '#7DF9FF',
+    fontSize: 36,
+    fontWeight: '800',
   },
   notFoundText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'red',
+    color: '#D1E3FB',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
 export default App;
-

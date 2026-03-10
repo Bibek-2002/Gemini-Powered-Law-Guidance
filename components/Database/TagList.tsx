@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface TagListProps {
@@ -8,27 +8,35 @@ interface TagListProps {
   onRemoveTag?: (index: number) => void;
 }
 
-const TagList: React.FC<TagListProps> = ({ tags, editable = false, onRemoveTag }) => {
-  if (!tags) {
-    return <Text style={styles.noTagsText}>No tags available</Text>;
-  }
-
-  const tagsArray = tags
+const parseTags = (value: string): string[] => {
+  return value
     .replace(/[\[\]']+/g, '')
     .split(',')
     .map((tag) => tag.trim())
-    .filter((tag) => tag.length > 0);
+    .filter(Boolean);
+};
+
+const TagList: React.FC<TagListProps> = ({ tags, editable = false, onRemoveTag }) => {
+  if (!tags) {
+    return <Text style={styles.emptyText}>No tags available</Text>;
+  }
+
+  const tagItems = parseTags(tags);
+
+  if (tagItems.length === 0) {
+    return <Text style={styles.emptyText}>No tags available</Text>;
+  }
 
   return (
-    <View style={styles.tagContainer}>
-      {tagsArray.map((tag, index) => (
-        <View key={index} style={styles.tagItem}>
+    <View style={styles.container}>
+      {tagItems.map((tag, index) => (
+        <View key={`${tag}-${index}`} style={styles.tag}>
           <Text style={styles.tagText}>{tag}</Text>
-          {editable && onRemoveTag && (
+          {editable && onRemoveTag ? (
             <TouchableOpacity onPress={() => onRemoveTag(index)} style={styles.removeButton}>
               <Ionicons name="close" size={12} color="#EAF2FF" />
             </TouchableOpacity>
-          )}
+          ) : null}
         </View>
       ))}
     </View>
@@ -36,20 +44,20 @@ const TagList: React.FC<TagListProps> = ({ tags, editable = false, onRemoveTag }
 };
 
 const styles = StyleSheet.create({
-  tagContainer: {
+  container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
   },
-  tagItem: {
-    backgroundColor: '#0A2230',
+  tag: {
     borderRadius: 20,
-    paddingHorizontal: 11,
-    paddingVertical: 6,
-    flexDirection: 'row',
-    alignItems: 'center',
     borderWidth: 1,
     borderColor: '#1E5366',
+    backgroundColor: '#0A2230',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 11,
+    paddingVertical: 6,
   },
   tagText: {
     color: '#A7F5FF',
@@ -60,7 +68,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     paddingHorizontal: 4,
   },
-  noTagsText: {
+  emptyText: {
     color: '#93A8C5',
     fontSize: 13,
     fontStyle: 'italic',

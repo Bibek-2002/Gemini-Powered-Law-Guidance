@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface PdfItem {
@@ -18,25 +18,21 @@ const PdfCard: React.FC<PdfCardProps> = ({ pdf, onDownload, isDownloading = fals
   return (
     <View style={styles.card}>
       <View style={styles.content}>
-        <View style={styles.iconContainer}>
+        <View style={styles.iconWrap}>
           <Ionicons name="document" size={20} color="#05111F" />
         </View>
-        <View style={styles.info}>
-          <Text style={styles.title} numberOfLines={2}>
-            {pdf.act_name}
-          </Text>
-          <Text style={styles.description} numberOfLines={3}>
-            {pdf.description}
-          </Text>
+        <View style={styles.copy}>
+          <Text style={styles.title} numberOfLines={2}>{pdf.act_name}</Text>
+          <Text style={styles.description} numberOfLines={3}>{pdf.description}</Text>
         </View>
       </View>
 
       <TouchableOpacity
-        style={[styles.downloadButton, isDownloading && styles.downloadingButton]}
+        style={[styles.button, isDownloading && styles.buttonDisabled]}
         onPress={() => onDownload(pdf.id)}
         disabled={isDownloading}
       >
-        <Text style={[styles.downloadText, isDownloading && styles.downloadingText]}>
+        <Text style={[styles.buttonText, isDownloading && styles.buttonTextDisabled]}>
           {isDownloading ? 'Downloading...' : 'Download'}
         </Text>
       </TouchableOpacity>
@@ -46,59 +42,58 @@ const PdfCard: React.FC<PdfCardProps> = ({ pdf, onDownload, isDownloading = fals
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#101D34',
     borderRadius: 14,
-    padding: 12,
-    marginBottom: 10,
     borderWidth: 1,
     borderColor: '#294569',
+    backgroundColor: '#101D34',
+    marginBottom: 10,
+    padding: 12,
   },
   content: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 14,
   },
-  iconContainer: {
+  iconWrap: {
     width: 36,
     height: 36,
     borderRadius: 10,
     backgroundColor: '#7DF9FF',
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 12,
   },
-  info: {
+  copy: {
     flex: 1,
   },
   title: {
+    color: '#EAF3FF',
     fontSize: 15,
     fontWeight: '700',
-    color: '#EAF3FF',
-    marginBottom: 6,
     lineHeight: 20,
+    marginBottom: 6,
   },
   description: {
-    fontSize: 12,
     color: '#A3B8D4',
+    fontSize: 12,
     lineHeight: 17,
   },
-  downloadButton: {
-    backgroundColor: '#7DF9FF',
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 9,
-    alignItems: 'center',
+  button: {
     alignSelf: 'flex-end',
+    borderRadius: 9,
+    backgroundColor: '#7DF9FF',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
   },
-  downloadingButton: {
+  buttonDisabled: {
     backgroundColor: '#6983A4',
   },
-  downloadText: {
+  buttonText: {
     color: '#05111F',
     fontSize: 12,
     fontWeight: '800',
   },
-  downloadingText: {
+  buttonTextDisabled: {
     color: '#E6F0FF',
   },
 });

@@ -6,77 +6,53 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 
-type FeaturesNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Key Features'>;
+type KeyFeaturesNavigation = NativeStackNavigationProp<RootStackParamList, 'Key Features'>;
 
 const featureCards = [
-  {
-    icon: 'sparkles',
-    title: 'Structured AI Replies',
-    text: 'Query engine returns legal sections and summary output in one response.',
-  },
-  {
-    icon: 'save',
-    title: 'One-Tap Case Save',
-    text: 'Important responses can be stored instantly for later review.',
-  },
-  {
-    icon: 'albums',
-    title: 'Editable Case Vault',
-    text: 'Saved records support updates to tags, notes, and case status.',
-  },
-  {
-    icon: 'document',
-    title: 'FIR Export Flow',
-    text: 'Generate report-ready FIR documents directly from the app.',
-  },
-  {
-    icon: 'library',
-    title: 'Bare Acts Library',
-    text: 'Search law sections and open source text without extra navigation.',
-  },
-  {
-    icon: 'folder-open',
-    title: 'Reference Documents',
-    text: 'Browse and filter legal documents in an independent local view.',
-  },
+  { icon: 'sparkles', title: 'Structured AI Replies', text: 'Query engine returns legal sections and summary output in one response.' },
+  { icon: 'save', title: 'One-Tap Case Save', text: 'Important responses can be stored instantly for later review.' },
+  { icon: 'albums', title: 'Editable Case Vault', text: 'Saved records support updates to tags, notes, and case status.' },
+  { icon: 'document', title: 'FIR Export Flow', text: 'Generate report-ready FIR documents directly from the app.' },
+  { icon: 'library', title: 'Bare Acts Library', text: 'Search law sections and open source text without extra navigation.' },
+  { icon: 'folder-open', title: 'Reference Documents', text: 'Browse and filter legal documents in an independent local view.' },
 ];
 
 const KeyFeatures: React.FC = () => {
-  const navigation = useNavigation<FeaturesNavigationProp>();
+  const navigation = useNavigation<KeyFeaturesNavigation>();
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <LinearGradient colors={['#0A0F1D', '#17345E', '#0B4A6F']} style={styles.hero}>
         <Text style={styles.heroTag}>Capabilities</Text>
         <Text style={styles.heroTitle}>Feature Matrix</Text>
         <Text style={styles.heroSubtitle}>All core tools remain available with a complete UI redesign.</Text>
       </LinearGradient>
 
-      <View style={styles.featureGrid}>
+      <View style={styles.grid}>
         {featureCards.map((feature) => (
           <View key={feature.title} style={styles.featureCard}>
-            <View style={styles.iconPill}>
+            <View style={styles.featureIcon}>
               <Ionicons name={feature.icon as keyof typeof Ionicons.glyphMap} size={18} color="#05111F" />
             </View>
             <Text style={styles.featureTitle}>{feature.title}</Text>
-            <Text style={styles.featureText}>{feature.text}</Text>
+            <Text style={styles.featureCopy}>{feature.text}</Text>
           </View>
         ))}
       </View>
 
-      <View style={styles.flowBox}>
+      <View style={styles.flow}>
         <Text style={styles.flowTitle}>Workflow Chain</Text>
         <Text style={styles.flowStep}>1. Ask and analyze in Query Console.</Text>
         <Text style={styles.flowStep}>2. Save selected output to Case Vault.</Text>
         <Text style={styles.flowStep}>3. Extend into Bare Acts or FIR Studio.</Text>
       </View>
 
-      <View style={styles.footerActions}>
-        <TouchableOpacity style={[styles.footerButton, styles.primary]} onPress={() => navigation.navigate('Utilities')}>
-          <Text style={styles.primaryText}>Open Workspace</Text>
+      <View style={styles.actions}>
+        <TouchableOpacity style={[styles.actionButton, styles.primaryAction]} onPress={() => navigation.navigate('Utilities')}>
+          <Text style={styles.primaryActionText}>Open Workspace</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.footerButton, styles.secondary]} onPress={() => navigation.navigate('Vision')}>
-          <Text style={styles.secondaryText}>Project Vision</Text>
+        <TouchableOpacity style={[styles.actionButton, styles.secondaryAction]} onPress={() => navigation.navigate('Vision')}>
+          <Text style={styles.secondaryActionText}>Project Vision</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -84,27 +60,27 @@ const KeyFeatures: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
     backgroundColor: '#050A18',
   },
-  contentContainer: {
+  content: {
+    gap: 14,
     padding: 18,
     paddingBottom: 26,
-    gap: 14,
   },
   hero: {
     borderRadius: 24,
-    padding: 20,
     borderWidth: 1,
     borderColor: '#26486D',
+    padding: 20,
   },
   heroTag: {
     color: '#7DF9FF',
     fontSize: 11,
+    fontWeight: '800',
     letterSpacing: 1,
     textTransform: 'uppercase',
-    fontWeight: '800',
     marginBottom: 8,
   },
   heroTitle: {
@@ -119,7 +95,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
-  featureGrid: {
+  grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
@@ -127,15 +103,15 @@ const styles = StyleSheet.create({
   },
   featureCard: {
     width: '48%',
-    backgroundColor: '#101D34',
+    minHeight: 158,
     borderRadius: 14,
     borderWidth: 1,
     borderColor: '#2A4468',
-    padding: 12,
-    minHeight: 158,
+    backgroundColor: '#101D34',
     gap: 6,
+    padding: 12,
   },
-  iconPill: {
+  featureIcon: {
     width: 31,
     height: 31,
     borderRadius: 9,
@@ -150,25 +126,25 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     lineHeight: 18,
   },
-  featureText: {
+  featureCopy: {
     color: '#9AB1CE',
     fontSize: 11,
     lineHeight: 17,
   },
-  flowBox: {
-    backgroundColor: '#0D1B31',
+  flow: {
     borderRadius: 16,
     borderWidth: 1,
     borderColor: '#25466D',
-    padding: 14,
+    backgroundColor: '#0D1B31',
     gap: 5,
+    padding: 14,
   },
   flowTitle: {
     color: '#F6A720',
     fontSize: 13,
     fontWeight: '800',
-    textTransform: 'uppercase',
     letterSpacing: 0.8,
+    textTransform: 'uppercase',
     marginBottom: 2,
   },
   flowStep: {
@@ -176,32 +152,32 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
   },
-  footerActions: {
+  actions: {
     flexDirection: 'row',
     gap: 10,
   },
-  footerButton: {
+  actionButton: {
     flex: 1,
-    borderRadius: 12,
     minHeight: 44,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 8,
   },
-  primary: {
+  primaryAction: {
     backgroundColor: '#7DF9FF',
   },
-  secondary: {
+  secondaryAction: {
     borderWidth: 1,
     borderColor: '#2F4C74',
     backgroundColor: '#101D34',
   },
-  primaryText: {
+  primaryActionText: {
     color: '#05111F',
     fontSize: 13,
     fontWeight: '800',
   },
-  secondaryText: {
+  secondaryActionText: {
     color: '#C8DCF8',
     fontSize: 13,
     fontWeight: '700',

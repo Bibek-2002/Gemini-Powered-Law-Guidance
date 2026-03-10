@@ -5,26 +5,28 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 
-const OfficialFIRFormat: React.FC = () => {
-  const [isDownloading, setIsDownloading] = useState(false);
+const FIR_DOC_URL =
+  'https://savelifefoundation.org/wp-content/uploads/2016/11/A1-Format-of-FIR-part-of-Step-I.docx';
 
-  const downloadDocx = async () => {
+const OfficialFIRFormat: React.FC = () => {
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
+
+  const handleDownload = async (): Promise<void> => {
     setIsDownloading(true);
     try {
-      const baseDir = (FileSystem as any).documentDirectory ?? (FileSystem as any).cacheDirectory ?? '';
-      const fileUri = baseDir + 'FIR-Format.docx';
+      const basePath = (FileSystem as { documentDirectory?: string; cacheDirectory?: string }).documentDirectory
+        ?? (FileSystem as { cacheDirectory?: string }).cacheDirectory
+        ?? '';
+      const destination = `${basePath}FIR-Format.docx`;
 
-      await FileSystem.downloadAsync(
-        'https://savelifefoundation.org/wp-content/uploads/2016/11/A1-Format-of-FIR-part-of-Step-I.docx',
-        fileUri
-      );
+      await FileSystem.downloadAsync(FIR_DOC_URL, destination);
 
       if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(fileUri);
+        await Sharing.shareAsync(destination);
       } else {
         Alert.alert('Download Complete', 'FIR format downloaded to device storage.');
       }
-    } catch (error) {
+    } catch {
       Alert.alert('Download Error', 'Unable to download FIR format right now.');
     } finally {
       setIsDownloading(false);
@@ -41,7 +43,7 @@ const OfficialFIRFormat: React.FC = () => {
         <Text style={styles.subtitle}>Download the standard FIR template as a ready-to-share DOCX file.</Text>
       </LinearGradient>
 
-      <TouchableOpacity style={styles.button} onPress={downloadDocx} disabled={isDownloading}>
+      <TouchableOpacity style={styles.button} onPress={handleDownload} disabled={isDownloading}>
         <Ionicons name={isDownloading ? 'sync' : 'download'} size={18} color="#05111F" />
         <Text style={styles.buttonText}>{isDownloading ? 'Downloading...' : 'Download FIR Format'}</Text>
       </TouchableOpacity>
@@ -58,10 +60,10 @@ const styles = StyleSheet.create({
   },
   hero: {
     borderRadius: 20,
-    padding: 20,
-    gap: 8,
     borderWidth: 1,
     borderColor: '#26486D',
+    gap: 8,
+    padding: 20,
   },
   iconWrap: {
     width: 36,
@@ -85,9 +87,9 @@ const styles = StyleSheet.create({
     minHeight: 48,
     borderRadius: 12,
     backgroundColor: '#7DF9FF',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row',
     gap: 8,
   },
   buttonText: {

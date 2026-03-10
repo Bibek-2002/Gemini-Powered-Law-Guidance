@@ -2,92 +2,91 @@ import React, { useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-interface ResponseData {
+interface ResponsePayload {
   acts?: Record<string, string>;
   description?: string;
-  [key: string]: any;
 }
 
 interface QueryResponseProps {
-  response: ResponseData | string;
+  response: ResponsePayload | string;
   isLoading: boolean;
   error: string;
 }
 
 const QueryResponse: React.FC<QueryResponseProps> = ({ response, isLoading, error }) => {
-  const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [expandedAct, setExpandedAct] = useState<string | null>(null);
 
-  const renderResponse = (data: ResponseData | string): React.ReactElement => {
-    if (typeof data === 'string') {
-      return <Text style={styles.text}>{data}</Text>;
+  const renderPayload = (payload: ResponsePayload | string): React.ReactElement => {
+    if (typeof payload === 'string') {
+      return <Text style={styles.plainText}>{payload}</Text>;
     }
 
-    if (data.acts && Object.keys(data.acts).length > 0) {
-      return (
-        <View style={styles.stack}>
-          {Object.entries(data.acts).map(([act, description]) => (
-            <View key={act} style={styles.item}>
-              <TouchableOpacity
-                style={styles.itemHeader}
-                onPress={() => setActiveSection(activeSection === act ? null : act)}
-              >
-                <Text style={styles.itemTitle}>{act}</Text>
-                <Ionicons
-                  name={activeSection === act ? 'chevron-up' : 'chevron-down'}
-                  size={18}
-                  color="#9FB4D1"
-                />
+    const acts = payload.acts ?? {};
+    const actEntries = Object.entries(acts);
+
+    if (actEntries.length === 0) {
+      return <Text style={styles.plainText}>No response data available.</Text>;
+    }
+
+    return (
+      <View style={styles.stack}>
+        {actEntries.map(([actName, actReason]) => {
+          const isExpanded = expandedAct === actName;
+          return (
+            <View key={actName} style={styles.item}>
+              <TouchableOpacity style={styles.itemHeader} onPress={() => setExpandedAct(isExpanded ? null : actName)}>
+                <Text style={styles.itemTitle}>{actName}</Text>
+                <Ionicons name={isExpanded ? 'chevron-up' : 'chevron-down'} size={18} color="#9FB4D1" />
               </TouchableOpacity>
-              {activeSection === act && <Text style={styles.itemBody}>{description}</Text>}
+              {isExpanded ? <Text style={styles.itemBody}>{actReason}</Text> : null}
             </View>
-          ))}
-          {data.description ? (
-            <View style={styles.summary}>
-              <Text style={styles.summaryTitle}>Summary</Text>
-              <Text style={styles.summaryText}>{data.description}</Text>
-            </View>
-          ) : null}
-        </View>
-      );
-    }
+          );
+        })}
 
-    return <Text style={styles.text}>No response data available.</Text>;
+        {payload.description ? (
+          <View style={styles.summaryCard}>
+            <Text style={styles.summaryTitle}>Summary</Text>
+            <Text style={styles.summaryText}>{payload.description}</Text>
+          </View>
+        ) : null}
+      </View>
+    );
   };
 
   return (
-    <View style={styles.box}>
+    <View style={styles.container}>
       <Text style={styles.label}>Analysis Output</Text>
       {isLoading ? (
-        <View style={styles.loaderWrap}>
+        <View style={styles.loader}>
           <ActivityIndicator size="large" color="#7DF9FF" />
           <Text style={styles.loaderText}>Analyzing query...</Text>
         </View>
       ) : error ? (
-        <Text style={styles.error}>{error}</Text>
+        <Text style={styles.errorText}>{error}</Text>
       ) : (
-        renderResponse(response)
+        renderPayload(response)
       )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  box: {
-    backgroundColor: '#101D34',
+  container: {
     borderRadius: 14,
     borderWidth: 1,
     borderColor: '#294569',
-    padding: 12,
+    backgroundColor: '#101D34',
     gap: 10,
+    padding: 12,
   },
   label: {
     color: '#A8C0DD',
     fontSize: 12,
     fontWeight: '700',
-    textTransform: 'uppercase',
     letterSpacing: 0.8,
+    textTransform: 'uppercase',
   },
-  text: {
+  plainText: {
     color: '#CFE0F6',
     fontSize: 14,
     lineHeight: 20,
@@ -97,17 +96,17 @@ const styles = StyleSheet.create({
   },
   item: {
     borderRadius: 12,
-    backgroundColor: '#0A162A',
     borderWidth: 1,
     borderColor: '#2B4B74',
+    backgroundColor: '#0A162A',
   },
   itemHeader: {
-    paddingHorizontal: 11,
-    paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 10,
+    paddingHorizontal: 11,
+    paddingVertical: 10,
   },
   itemTitle: {
     flex: 1,
@@ -122,7 +121,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 11,
     paddingBottom: 10,
   },
-  summary: {
+  summaryCard: {
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#1D5563',
@@ -141,17 +140,17 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 19,
   },
-  loaderWrap: {
+  loader: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
     gap: 8,
+    paddingVertical: 16,
   },
   loaderText: {
     color: '#9FB4D1',
     fontSize: 13,
   },
-  error: {
+  errorText: {
     color: '#FCA5A5',
     fontSize: 13,
     lineHeight: 19,
