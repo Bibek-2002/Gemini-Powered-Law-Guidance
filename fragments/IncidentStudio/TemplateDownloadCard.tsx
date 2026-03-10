@@ -12,17 +12,21 @@ const TemplateDownloadCard: React.FC<DownloadSectionProps> = ({ isDownloading, o
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.iconWrap}>
-          <Ionicons name="download" size={18} color="#05111F" />
+          <Ionicons name="document" size={18} color="#05111F" />
         </View>
         <View style={styles.textWrap}>
-          <Text style={styles.title}>Official Incident Template</Text>
-          <Text style={styles.subtitle}>Download official DOCX template for reference.</Text>
+          <Text style={styles.title}>Base Incident Template</Text>
+          <Text style={styles.subtitle}>Generate a blank PDF template for manual or assisted reporting.</Text>
         </View>
       </View>
 
-      <TouchableOpacity style={[styles.button, isDownloading && styles.buttonDisabled]} onPress={onDownload} disabled={isDownloading}>
+      <TouchableOpacity
+        style={[styles.button, isDownloading && styles.buttonDisabled]}
+        onPress={onDownload}
+        disabled={isDownloading}
+      >
         {isDownloading ? <ActivityIndicator color="#05111F" size="small" /> : <Ionicons name="download-outline" size={18} color="#05111F" />}
-        <Text style={styles.buttonText}>{isDownloading ? 'Downloading...' : 'Download Incident Template'}</Text>
+        <Text style={styles.buttonText}>{isDownloading ? 'Preparing Template...' : 'Export Template PDF'}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../routeRegistry';
+import { RootStackParamList } from '../appRoutes';
 
 type UtilityNavigation = NativeStackNavigationProp<RootStackParamList, 'Modules'>;
 

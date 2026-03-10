@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 const privacySections = [
   {
     title: 'Data Scope',
-    text: 'NyayaFlow Assist stores case-related content locally to support history and workflow continuity.',
+    text: 'NyayaNexus Studio stores case-related content locally to support history and workflow continuity.',
   },
   {
     title: 'Usage Purpose',
@@ -31,7 +31,7 @@ const PrivacyOverviewScreen: React.FC = () => {
       <LinearGradient colors={['#0A0F1D', '#16345D', '#0B4A6F']} style={styles.hero}>
         <Text style={styles.heroTag}>Policy</Text>
         <Text style={styles.heroTitle}>Privacy Overview</Text>
-        <Text style={styles.heroSubtitle}>How data is handled in the current NyayaFlow Assist release.</Text>
+        <Text style={styles.heroSubtitle}>How data is handled in the current NyayaNexus Studio release.</Text>
       </LinearGradient>
 
       <View style={styles.sectionList}>

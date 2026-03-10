@@ -1,6 +1,6 @@
-# NyayaFlow Assist Deployment Guide
+# NyayaNexus Studio Deployment Guide
 
-Production and internal distribution guide for the Expo/EAS setup.
+Deployment checklist for Expo + EAS builds of NyayaNexus Studio.
 
 ## Prerequisites
 
@@ -9,27 +9,25 @@ Production and internal distribution guide for the Expo/EAS setup.
 - Expo CLI
 - EAS CLI
 
-## Install
+## Install Dependencies
 
 ```bash
 npm install
 ```
 
-## Run in Development
+## Development Run
 
 ```bash
 npm run start
 ```
 
-## Configure EAS
-
-If this is a fresh clone or new app identity, configure EAS project metadata:
+## Configure EAS (First-Time Setup)
 
 ```bash
 eas build:configure
 ```
 
-## Build Artifacts
+## Build Commands
 
 ### Android
 
@@ -43,24 +41,24 @@ npm run build:android
 npm run build:ios
 ```
 
-## Submit to Stores
+## Submit Commands
 
 ```bash
 npm run submit:android
 npm run submit:ios
 ```
 
-## Icons and Branding Assets
+## Branding Assets
 
-Assets are stored in `assets/`.
+Assets are under `assets/`:
 
-- `icon.png` (main icon)
+- `icon.png`
 - `adaptive-icon.png`
 - `splash-icon.png`
 - `favicon.png`
-- `nyayaflow-icon.svg` (editable source)
+- `nyayanexus-icon.svg` (editable vector source)
 
-## Runtime Environment Variables
+## Runtime Environment
 
 ```bash
 EXPO_PUBLIC_GEMINI_API_KEY=your_api_key_here
@@ -70,20 +68,20 @@ EXPO_PUBLIC_GEMINI_MODEL=gemini-3-flash-preview
 ## Source Layout
 
 ```text
-AppShell.tsx
-routeRegistry.ts
+WorkspaceNavigator.tsx
+appRoutes.ts
 workflows/
 fragments/
 integrations/
 domain/
-statutes/
 assets/
+images/
 ```
 
 ## Release Checklist
 
-1. Confirm environment variables in build profiles.
-2. Run local smoke test (`npm run start`).
-3. Verify navigation routes and incident export flow.
-4. Build Android and/or iOS artifacts.
-5. Validate final binary before store submission.
+1. Validate `.env` and EAS profile secrets.
+2. Run smoke test and verify navigation routes.
+3. Confirm incident template + PDF export flow.
+4. Build target platform artifact.
+5. Test generated artifact before distribution.

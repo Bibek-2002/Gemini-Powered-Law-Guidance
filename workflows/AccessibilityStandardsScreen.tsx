@@ -7,7 +7,7 @@ const commitments = [
   'Consistent touch targets across form-heavy screens and action cards.',
   'Scrollable content blocks with predictable spacing and grouping.',
   'Readable layout behavior for compact and larger mobile displays.',
-  'Clear labels to reduce friction during FIR and case entry workflows.',
+  'Clear labels to reduce friction during incident and case entry workflows.',
 ];
 
 const AccessibilityStandardsScreen: React.FC = () => {

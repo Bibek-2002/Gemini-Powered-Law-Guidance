@@ -2,44 +2,44 @@ import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-interface IncidentDetailsCardProps {
+interface IdentityDetailsCardProps {
   formData: {
-    district: string;
-    policeStation: string;
-    year: string;
-    firNo: string;
-    date: string;
+    jurisdiction: string;
+    authorityDesk: string;
+    referenceYear: string;
+    reportId: string;
+    filedOn: string;
   };
-  onChange: (name: string, value: string) => void;
+  onChange: (name: 'jurisdiction' | 'authorityDesk' | 'referenceYear' | 'reportId' | 'filedOn', value: string) => void;
 }
 
-const ReportIdentityCard: React.FC<IncidentDetailsCardProps> = ({ formData, onChange }) => {
+const ReportIdentityCard: React.FC<IdentityDetailsCardProps> = ({ formData, onChange }) => {
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <Ionicons name="shield-checkmark" size={18} color="#7DF9FF" />
-        <Text style={styles.title}>Incident Details</Text>
+        <Text style={styles.title}>Report Identity</Text>
       </View>
 
       <View style={styles.row}>
         <View style={styles.group}>
-          <Text style={styles.label}>District *</Text>
+          <Text style={styles.label}>Jurisdiction *</Text>
           <TextInput
             style={styles.input}
-            value={formData.district}
-            onChangeText={(value) => onChange('district', value)}
-            placeholder="Enter district"
+            value={formData.jurisdiction}
+            onChangeText={(value) => onChange('jurisdiction', value)}
+            placeholder="Enter jurisdiction"
             placeholderTextColor="#7993B5"
           />
         </View>
 
         <View style={styles.group}>
-          <Text style={styles.label}>Police Station *</Text>
+          <Text style={styles.label}>Authority Desk *</Text>
           <TextInput
             style={styles.input}
-            value={formData.policeStation}
-            onChangeText={(value) => onChange('policeStation', value)}
-            placeholder="Enter police station"
+            value={formData.authorityDesk}
+            onChangeText={(value) => onChange('authorityDesk', value)}
+            placeholder="Enter authority desk"
             placeholderTextColor="#7993B5"
           />
         </View>
@@ -47,11 +47,11 @@ const ReportIdentityCard: React.FC<IncidentDetailsCardProps> = ({ formData, onCh
 
       <View style={styles.row}>
         <View style={styles.group}>
-          <Text style={styles.label}>Year</Text>
+          <Text style={styles.label}>Reference Year</Text>
           <TextInput
             style={styles.input}
-            value={formData.year}
-            onChangeText={(value) => onChange('year', value)}
+            value={formData.referenceYear}
+            onChangeText={(value) => onChange('referenceYear', value)}
             keyboardType="numeric"
             placeholder="Enter year"
             placeholderTextColor="#7993B5"
@@ -59,23 +59,23 @@ const ReportIdentityCard: React.FC<IncidentDetailsCardProps> = ({ formData, onCh
         </View>
 
         <View style={styles.group}>
-          <Text style={styles.label}>Report No. *</Text>
+          <Text style={styles.label}>Report ID *</Text>
           <TextInput
             style={styles.input}
-            value={formData.firNo}
-            onChangeText={(value) => onChange('firNo', value)}
-            placeholder="Enter report number"
+            value={formData.reportId}
+            onChangeText={(value) => onChange('reportId', value)}
+            placeholder="Enter report ID"
             placeholderTextColor="#7993B5"
           />
         </View>
       </View>
 
       <View style={styles.group}>
-        <Text style={styles.label}>Date</Text>
+        <Text style={styles.label}>Filed On</Text>
         <TextInput
           style={styles.input}
-          value={formData.date}
-          onChangeText={(value) => onChange('date', value)}
+          value={formData.filedOn}
+          onChangeText={(value) => onChange('filedOn', value)}
           placeholder="DD/MM/YYYY"
           placeholderTextColor="#7993B5"
         />

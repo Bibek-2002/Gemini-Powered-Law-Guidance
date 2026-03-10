@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../routeRegistry';
+import { RootStackParamList } from '../appRoutes';
 
 type HomeNavigation = NativeStackNavigationProp<RootStackParamList, 'Hub'>;
 
@@ -28,7 +28,7 @@ const CommandCenterScreen: React.FC = () => {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <LinearGradient colors={['#0A0F1D', '#11284A', '#0E7490']} style={styles.hero}>
-        <Text style={styles.badge}>NyayaFlow Assist</Text>
+        <Text style={styles.badge}>NyayaNexus Studio</Text>
         <Text style={styles.title}>Legal Command Deck</Text>
         <Text style={styles.subtitle}>
           A redesigned workflow app for legal drafting, research, records, and incident reporting.

@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../routeRegistry';
+import { RootStackParamList } from '../appRoutes';
 
 type VisionNavigation = NativeStackNavigationProp<RootStackParamList, 'Principles'>;
 
@@ -22,7 +22,7 @@ const ProductPrinciplesScreen: React.FC = () => {
       <LinearGradient colors={['#0A0F1D', '#1B3B67', '#0A596E']} style={styles.header}>
         <Text style={styles.headerTag}>Principles</Text>
         <Text style={styles.headerTitle}>Practical Legal Workflow Platform</Text>
-        <Text style={styles.headerSubtitle}>NyayaFlow Assist focuses on real productivity and traceable legal operations.</Text>
+        <Text style={styles.headerSubtitle}>NyayaNexus Studio focuses on real productivity and traceable legal operations.</Text>
       </LinearGradient>
 
       <View style={styles.directionCard}>

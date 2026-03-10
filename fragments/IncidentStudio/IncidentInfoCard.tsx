@@ -2,41 +2,41 @@ import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-interface OffenceDetailsCardProps {
+interface IncidentInfoCardProps {
   formData: {
-    offenceDate: string;
-    offenceTime: string;
-    address: string;
+    incidentDate: string;
+    incidentTime: string;
+    incidentLocation: string;
   };
-  onChange: (name: string, value: string) => void;
+  onChange: (name: 'incidentDate' | 'incidentTime' | 'incidentLocation', value: string) => void;
 }
 
-const IncidentInfoCard: React.FC<OffenceDetailsCardProps> = ({ formData, onChange }) => {
+const IncidentInfoCard: React.FC<IncidentInfoCardProps> = ({ formData, onChange }) => {
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <Ionicons name="warning" size={18} color="#F6A720" />
-        <Text style={styles.title}>Offence Details</Text>
+        <Text style={styles.title}>Incident Facts</Text>
       </View>
 
       <View style={styles.row}>
         <View style={styles.group}>
-          <Text style={styles.label}>Offence Date</Text>
+          <Text style={styles.label}>Incident Date</Text>
           <TextInput
             style={styles.input}
-            value={formData.offenceDate}
-            onChangeText={(value) => onChange('offenceDate', value)}
+            value={formData.incidentDate}
+            onChangeText={(value) => onChange('incidentDate', value)}
             placeholder="DD/MM/YYYY"
             placeholderTextColor="#7993B5"
           />
         </View>
 
         <View style={styles.group}>
-          <Text style={styles.label}>Offence Time</Text>
+          <Text style={styles.label}>Incident Time</Text>
           <TextInput
             style={styles.input}
-            value={formData.offenceTime}
-            onChangeText={(value) => onChange('offenceTime', value)}
+            value={formData.incidentTime}
+            onChangeText={(value) => onChange('incidentTime', value)}
             placeholder="HH:MM"
             placeholderTextColor="#7993B5"
           />
@@ -44,14 +44,14 @@ const IncidentInfoCard: React.FC<OffenceDetailsCardProps> = ({ formData, onChang
       </View>
 
       <View style={styles.group}>
-        <Text style={styles.label}>Place of Occurrence *</Text>
+        <Text style={styles.label}>Incident Location *</Text>
         <TextInput
           style={[styles.input, styles.textArea]}
-          value={formData.address}
-          onChangeText={(value) => onChange('address', value)}
+          value={formData.incidentLocation}
+          onChangeText={(value) => onChange('incidentLocation', value)}
           multiline
           numberOfLines={3}
-          placeholder="Enter detailed address of the offence"
+          placeholder="Enter where the incident took place"
           placeholderTextColor="#7993B5"
         />
       </View>

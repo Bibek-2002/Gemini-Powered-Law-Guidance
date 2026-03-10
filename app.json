@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "NyayaFlow Assist",
-    "slug": "nyayaflow-assist",
+    "name": "NyayaNexus Studio",
+    "slug": "nyayanexus-studio",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "scheme": "nyayaflow-assist",
+    "scheme": "nyayanexus-studio",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -15,11 +15,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.bibek.nyayaflowassist",
+      "bundleIdentifier": "com.bibek.nyayanexusstudio",
       "buildNumber": "1.0.0"
     },
     "android": {
-      "package": "com.bibek.nyayaflowassist",
+      "package": "com.bibek.nyayanexusstudio",
       "permissions": [
         "android.permission.INTERNET",
         "android.permission.ACCESS_NETWORK_STATE",

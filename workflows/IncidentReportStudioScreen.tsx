@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import * as Print from 'expo-print';
-import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import {
   StudioHeaderBanner,
@@ -12,99 +11,154 @@ import {
   ActionFormButton,
 } from '../fragments/IncidentStudio/exports';
 
-interface FIRFormState {
-  district: string;
-  policeStation: string;
-  year: string;
-  firNo: string;
-  date: string;
-  offenceDate: string;
-  offenceTime: string;
-  address: string;
-  complainantName: string;
-  fatherName: string;
-  birthDate: string;
-  nationality: string;
+interface IncidentFormState {
+  jurisdiction: string;
+  authorityDesk: string;
+  referenceYear: string;
+  reportId: string;
+  filedOn: string;
+  incidentDate: string;
+  incidentTime: string;
+  incidentLocation: string;
+  reporterName: string;
+  guardianName: string;
+  dateOfBirth: string;
+  citizenship: string;
   occupation: string;
-  complainantAddress: string;
+  contactAddress: string;
 }
 
-const INCIDENT_TEMPLATE_URL =
-  'https://savelifefoundation.org/wp-content/uploads/2016/11/A1-Format-of-FIR-part-of-Step-I.docx';
-
-const createInitialFormState = (): FIRFormState => ({
-  district: '',
-  policeStation: '',
-  year: '',
-  firNo: '',
-  date: '',
-  offenceDate: '',
-  offenceTime: '',
-  address: '',
-  complainantName: '',
-  fatherName: '',
-  birthDate: '',
-  nationality: '',
+const createInitialFormState = (): IncidentFormState => ({
+  jurisdiction: '',
+  authorityDesk: '',
+  referenceYear: '',
+  reportId: '',
+  filedOn: '',
+  incidentDate: '',
+  incidentTime: '',
+  incidentLocation: '',
+  reporterName: '',
+  guardianName: '',
+  dateOfBirth: '',
+  citizenship: '',
   occupation: '',
-  complainantAddress: '',
+  contactAddress: '',
 });
 
-const requiredFields: Array<keyof FIRFormState> = [
-  'district',
-  'policeStation',
-  'firNo',
-  'complainantName',
-  'address',
+const requiredFields: Array<{ field: keyof IncidentFormState; label: string }> = [
+  { field: 'jurisdiction', label: 'Jurisdiction' },
+  { field: 'authorityDesk', label: 'Authority Desk' },
+  { field: 'reportId', label: 'Report ID' },
+  { field: 'incidentLocation', label: 'Incident Location' },
+  { field: 'reporterName', label: 'Reporter Name' },
 ];
 
-const createFirHtml = (form: FIRFormState): string => `
+const escapeHtml = (value: string): string => {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+};
+
+const row = (label: string, value: string): string => {
+  const safeValue = escapeHtml(value.trim() || '-');
+  return `<p class="row"><span class="label">${label}:</span><span class="value">${safeValue}</span></p>`;
+};
+
+const createIncidentHtml = (form: IncidentFormState): string => `
   <html>
     <head>
       <style>
-        body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
-        h1, h2 { text-align: center; color: #1D4ED8; }
-        .section { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .field { margin: 8px 0; }
-        .label { font-weight: bold; color: #333; }
-        .value { margin-left: 10px; }
+        body { font-family: Arial, sans-serif; padding: 18px; line-height: 1.55; color: #111827; }
+        h1 { text-align: center; color: #0F3A67; margin: 0 0 6px; }
+        h2 { color: #0F3A67; border-bottom: 1px solid #E5E7EB; padding-bottom: 4px; margin-bottom: 8px; }
+        .meta { text-align: center; color: #4B5563; margin: 0 0 18px; font-size: 12px; }
+        .section { margin-bottom: 18px; }
+        .row { margin: 7px 0; }
+        .label { font-weight: bold; display: inline-block; width: 180px; color: #1F2937; }
+        .value { color: #111827; }
       </style>
     </head>
     <body>
-      <h1>FORM - IF1 (Integrated Form)</h1>
-      <h2>FIRST INFORMATION REPORT</h2>
+      <h1>Incident Intake Report</h1>
+      <p class="meta">Generated via NyayaNexus Studio</p>
+
       <div class="section">
-        <h3>FIR Details</h3>
-        <p class="field"><span class="label">District:</span><span class="value">${form.district}</span></p>
-        <p class="field"><span class="label">Police Station:</span><span class="value">${form.policeStation}</span></p>
-        <p class="field"><span class="label">Year:</span><span class="value">${form.year}</span></p>
-        <p class="field"><span class="label">Report No:</span><span class="value">${form.firNo}</span></p>
-        <p class="field"><span class="label">Date:</span><span class="value">${form.date}</span></p>
+        <h2>Identity</h2>
+        ${row('Jurisdiction', form.jurisdiction)}
+        ${row('Authority Desk', form.authorityDesk)}
+        ${row('Reference Year', form.referenceYear)}
+        ${row('Report ID', form.reportId)}
+        ${row('Filed On', form.filedOn)}
       </div>
+
       <div class="section">
-        <h3>Offence Details</h3>
-        <p class="field"><span class="label">Offence Date:</span><span class="value">${form.offenceDate}</span></p>
-        <p class="field"><span class="label">Offence Time:</span><span class="value">${form.offenceTime}</span></p>
-        <p class="field"><span class="label">Address:</span><span class="value">${form.address}</span></p>
+        <h2>Incident Facts</h2>
+        ${row('Incident Date', form.incidentDate)}
+        ${row('Incident Time', form.incidentTime)}
+        ${row('Incident Location', form.incidentLocation)}
       </div>
+
       <div class="section">
-        <h3>Complainant Details</h3>
-        <p class="field"><span class="label">Name:</span><span class="value">${form.complainantName}</span></p>
-        <p class="field"><span class="label">Father/Husband:</span><span class="value">${form.fatherName}</span></p>
-        <p class="field"><span class="label">Date of Birth:</span><span class="value">${form.birthDate}</span></p>
-        <p class="field"><span class="label">Nationality:</span><span class="value">${form.nationality}</span></p>
-        <p class="field"><span class="label">Occupation:</span><span class="value">${form.occupation}</span></p>
-        <p class="field"><span class="label">Address:</span><span class="value">${form.complainantAddress}</span></p>
+        <h2>Reporter Profile</h2>
+        ${row('Reporter Name', form.reporterName)}
+        ${row('Guardian / Contact Person', form.guardianName)}
+        ${row('Date of Birth', form.dateOfBirth)}
+        ${row('Citizenship', form.citizenship)}
+        ${row('Occupation', form.occupation)}
+        ${row('Contact Address', form.contactAddress)}
       </div>
     </body>
   </html>
 `;
 
+const createTemplateHtml = (): string => `
+  <html>
+    <head>
+      <style>
+        body { font-family: Arial, sans-serif; padding: 18px; line-height: 1.6; color: #111827; }
+        h1 { text-align: center; color: #0F3A67; margin: 0 0 6px; }
+        .meta { text-align: center; color: #4B5563; margin: 0 0 16px; font-size: 12px; }
+        h2 { color: #0F3A67; border-bottom: 1px solid #E5E7EB; padding-bottom: 4px; margin-bottom: 8px; }
+        .line { margin: 8px 0; }
+      </style>
+    </head>
+    <body>
+      <h1>Incident Intake Template</h1>
+      <p class="meta">Blank reference sheet generated by NyayaNexus Studio</p>
+
+      <h2>Identity</h2>
+      <p class="line">Jurisdiction: ________________________________</p>
+      <p class="line">Authority Desk: _____________________________</p>
+      <p class="line">Reference Year: _____________________________</p>
+      <p class="line">Report ID: __________________________________</p>
+      <p class="line">Filed On: ____________________________________</p>
+
+      <h2>Incident Facts</h2>
+      <p class="line">Incident Date: ______________________________</p>
+      <p class="line">Incident Time: ______________________________</p>
+      <p class="line">Incident Location: ___________________________</p>
+      <p class="line">Summary: ____________________________________</p>
+
+      <h2>Reporter Profile</h2>
+      <p class="line">Reporter Name: ______________________________</p>
+      <p class="line">Guardian / Contact: _________________________</p>
+      <p class="line">Date of Birth: ______________________________</p>
+      <p class="line">Citizenship: _________________________________</p>
+      <p class="line">Occupation: _________________________________</p>
+      <p class="line">Contact Address: ____________________________</p>
+    </body>
+  </html>
+`;
+
 const IncidentReportStudioScreen: React.FC = () => {
-  const [form, setForm] = useState<FIRFormState>(createInitialFormState);
-  const [downloading, setDownloading] = useState<boolean>(false);
+  const [form, setForm] = useState<IncidentFormState>(createInitialFormState);
+  const [downloadingTemplate, setDownloadingTemplate] = useState<boolean>(false);
   const [exportingPdf, setExportingPdf] = useState<boolean>(false);
 
-  const updateField = (fieldName: string, value: string): void => {
+  const updateField = (fieldName: keyof IncidentFormState, value: string): void => {
     setForm((current) => ({
       ...current,
       [fieldName]: value,
@@ -112,30 +166,38 @@ const IncidentReportStudioScreen: React.FC = () => {
   };
 
   const validateRequiredFields = (): boolean => {
-    for (const field of requiredFields) {
-      if (!String(form[field]).trim()) {
-        Alert.alert('Validation Error', `Please fill the ${field} field.`);
+    for (const item of requiredFields) {
+      if (!String(form[item.field]).trim()) {
+        Alert.alert('Validation Error', `Please fill the ${item.label} field.`);
         return false;
       }
     }
+
     return true;
   };
 
-  const downloadDocxTemplate = async (): Promise<void> => {
-    setDownloading(true);
+  const exportTemplatePdf = async (): Promise<void> => {
+    setDownloadingTemplate(true);
+
     try {
-      const destination = `${FileSystem.documentDirectory}Incident-Template.docx`;
-      await FileSystem.downloadAsync(INCIDENT_TEMPLATE_URL, destination);
+      const printable = await Print.printToFileAsync({
+        html: createTemplateHtml(),
+      });
+
+      if (!printable?.uri) {
+        Alert.alert('Error', 'Failed to prepare template PDF.');
+        return;
+      }
 
       if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(destination);
+        await Sharing.shareAsync(printable.uri);
       } else {
-        Alert.alert('Download Complete', 'Incident template downloaded to your device.');
+        Alert.alert('Template Ready', 'Template PDF generated successfully.');
       }
     } catch {
-      Alert.alert('Download Failed', 'Unable to download incident template right now.');
+      Alert.alert('Template Error', 'Unable to export incident template right now.');
     } finally {
-      setDownloading(false);
+      setDownloadingTemplate(false);
     }
   };
 
@@ -148,7 +210,7 @@ const IncidentReportStudioScreen: React.FC = () => {
 
     try {
       const printable = await Print.printToFileAsync({
-        html: createFirHtml(form),
+        html: createIncidentHtml(form),
       });
 
       if (!printable?.uri) {
@@ -170,48 +232,53 @@ const IncidentReportStudioScreen: React.FC = () => {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <StudioHeaderBanner title="Incident Studio" subtitle="Download format, fill details, and export structured incident reports" />
+      <StudioHeaderBanner
+        title="Incident Studio"
+        subtitle="Prepare intake details, review fields, and export a printable report in one flow"
+      />
 
       <View style={styles.stepCard}>
-        <Text style={styles.stepText}>Step 1: Download format</Text>
-        <Text style={styles.stepText}>Step 2: Fill details</Text>
-        <Text style={styles.stepText}>Step 3: Export PDF</Text>
+        <Text style={styles.stepText}>Step 1: Export blank template</Text>
+        <Text style={styles.stepText}>Step 2: Fill incident details</Text>
+        <Text style={styles.stepText}>Step 3: Generate final PDF</Text>
       </View>
 
-      <TemplateDownloadCard isDownloading={downloading} onDownload={downloadDocxTemplate} />
+      <TemplateDownloadCard isDownloading={downloadingTemplate} onDownload={exportTemplatePdf} />
 
       <View style={styles.formCard}>
-        <Text style={styles.formTitle}>Generate Custom Incident Report</Text>
-        <Text style={styles.formSubtitle}>Enter required details and export a printable incident summary instantly.</Text>
+        <Text style={styles.formTitle}>Create Incident Report</Text>
+        <Text style={styles.formSubtitle}>
+          Fill the required sections below and generate a structured document for sharing or filing.
+        </Text>
 
         <ReportIdentityCard
           formData={{
-            district: form.district,
-            policeStation: form.policeStation,
-            year: form.year,
-            firNo: form.firNo,
-            date: form.date,
+            jurisdiction: form.jurisdiction,
+            authorityDesk: form.authorityDesk,
+            referenceYear: form.referenceYear,
+            reportId: form.reportId,
+            filedOn: form.filedOn,
           }}
           onChange={updateField}
         />
 
         <IncidentInfoCard
           formData={{
-            offenceDate: form.offenceDate,
-            offenceTime: form.offenceTime,
-            address: form.address,
+            incidentDate: form.incidentDate,
+            incidentTime: form.incidentTime,
+            incidentLocation: form.incidentLocation,
           }}
           onChange={updateField}
         />
 
         <ReporterInfoCard
           formData={{
-            complainantName: form.complainantName,
-            fatherName: form.fatherName,
-            birthDate: form.birthDate,
-            nationality: form.nationality,
+            reporterName: form.reporterName,
+            guardianName: form.guardianName,
+            dateOfBirth: form.dateOfBirth,
+            citizenship: form.citizenship,
             occupation: form.occupation,
-            complainantAddress: form.complainantAddress,
+            contactAddress: form.contactAddress,
           }}
           onChange={updateField}
         />
@@ -250,8 +317,8 @@ const styles = StyleSheet.create({
     color: '#F6A720',
     fontSize: 11,
     fontWeight: '800',
-    textTransform: 'uppercase',
     letterSpacing: 0.6,
+    textTransform: 'uppercase',
   },
   formCard: {
     margin: 20,

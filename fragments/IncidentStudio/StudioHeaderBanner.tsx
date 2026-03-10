@@ -3,12 +3,12 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-interface FIRHeaderProps {
+interface StudioHeaderProps {
   title: string;
   subtitle: string;
 }
 
-const StudioHeaderBanner: React.FC<FIRHeaderProps> = ({ title, subtitle }) => {
+const StudioHeaderBanner: React.FC<StudioHeaderProps> = ({ title, subtitle }) => {
   return (
     <LinearGradient colors={['#0A0F1D', '#17345E', '#0B4A6F']} style={styles.container}>
       <View style={styles.content}>

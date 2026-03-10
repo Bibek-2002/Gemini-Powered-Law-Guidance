@@ -2,44 +2,47 @@ import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-interface ComplainantDetailsCardProps {
+interface ReporterDetailsCardProps {
   formData: {
-    complainantName: string;
-    fatherName: string;
-    birthDate: string;
-    nationality: string;
+    reporterName: string;
+    guardianName: string;
+    dateOfBirth: string;
+    citizenship: string;
     occupation: string;
-    complainantAddress: string;
+    contactAddress: string;
   };
-  onChange: (name: string, value: string) => void;
+  onChange: (
+    name: 'reporterName' | 'guardianName' | 'dateOfBirth' | 'citizenship' | 'occupation' | 'contactAddress',
+    value: string
+  ) => void;
 }
 
-const ReporterInfoCard: React.FC<ComplainantDetailsCardProps> = ({ formData, onChange }) => {
+const ReporterInfoCard: React.FC<ReporterDetailsCardProps> = ({ formData, onChange }) => {
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <Ionicons name="person" size={18} color="#84CC16" />
-        <Text style={styles.title}>Complainant Details</Text>
+        <Text style={styles.title}>Reporter Profile</Text>
       </View>
 
       <View style={styles.group}>
-        <Text style={styles.label}>Full Name *</Text>
+        <Text style={styles.label}>Reporter Name *</Text>
         <TextInput
           style={styles.input}
-          value={formData.complainantName}
-          onChangeText={(value) => onChange('complainantName', value)}
-          placeholder="Enter complainant full name"
+          value={formData.reporterName}
+          onChangeText={(value) => onChange('reporterName', value)}
+          placeholder="Enter reporter name"
           placeholderTextColor="#7993B5"
         />
       </View>
 
       <View style={styles.row}>
         <View style={styles.group}>
-          <Text style={styles.label}>Father/Husband Name</Text>
+          <Text style={styles.label}>Guardian / Contact Person</Text>
           <TextInput
             style={styles.input}
-            value={formData.fatherName}
-            onChangeText={(value) => onChange('fatherName', value)}
+            value={formData.guardianName}
+            onChangeText={(value) => onChange('guardianName', value)}
             placeholder="Enter name"
             placeholderTextColor="#7993B5"
           />
@@ -49,8 +52,8 @@ const ReporterInfoCard: React.FC<ComplainantDetailsCardProps> = ({ formData, onC
           <Text style={styles.label}>Date of Birth</Text>
           <TextInput
             style={styles.input}
-            value={formData.birthDate}
-            onChangeText={(value) => onChange('birthDate', value)}
+            value={formData.dateOfBirth}
+            onChangeText={(value) => onChange('dateOfBirth', value)}
             placeholder="DD/MM/YYYY"
             placeholderTextColor="#7993B5"
           />
@@ -59,12 +62,12 @@ const ReporterInfoCard: React.FC<ComplainantDetailsCardProps> = ({ formData, onC
 
       <View style={styles.row}>
         <View style={styles.group}>
-          <Text style={styles.label}>Nationality</Text>
+          <Text style={styles.label}>Citizenship</Text>
           <TextInput
             style={styles.input}
-            value={formData.nationality}
-            onChangeText={(value) => onChange('nationality', value)}
-            placeholder="Enter nationality"
+            value={formData.citizenship}
+            onChangeText={(value) => onChange('citizenship', value)}
+            placeholder="Enter citizenship"
             placeholderTextColor="#7993B5"
           />
         </View>
@@ -82,14 +85,14 @@ const ReporterInfoCard: React.FC<ComplainantDetailsCardProps> = ({ formData, onC
       </View>
 
       <View style={styles.group}>
-        <Text style={styles.label}>Address</Text>
+        <Text style={styles.label}>Contact Address</Text>
         <TextInput
           style={[styles.input, styles.textArea]}
-          value={formData.complainantAddress}
-          onChangeText={(value) => onChange('complainantAddress', value)}
+          value={formData.contactAddress}
+          onChangeText={(value) => onChange('contactAddress', value)}
           multiline
           numberOfLines={3}
-          placeholder="Enter complainant address"
+          placeholder="Enter contact address"
           placeholderTextColor="#7993B5"
         />
       </View>
