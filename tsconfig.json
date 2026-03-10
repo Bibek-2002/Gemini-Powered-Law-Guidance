@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
   "extends": "expo/tsconfig.base",
-  "exclude": [
-    "**/*.json"
-  ],
   "include": [
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "**/*.json"
   ]
 }

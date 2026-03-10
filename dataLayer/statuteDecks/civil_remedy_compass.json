@@ -1,0 +1,38 @@
+{
+  "code": "CPC",
+  "title": "Code of Civil Procedure, 1908",
+  "objective": "Civil litigation deck for jurisdiction, interim remedies, and execution strategy.",
+  "updated": "Last reviewed: March 2026",
+  "sections": [
+    {
+      "section": "9",
+      "topic": "Courts to try all civil suits unless barred",
+      "note": "Initial maintainability checkpoint before drafting plaint or challenging forum."
+    },
+    {
+      "section": "10",
+      "topic": "Stay of suit",
+      "note": "Relevant where similar issues are already pending in a previously instituted suit."
+    },
+    {
+      "section": "26",
+      "topic": "Institution of suits",
+      "note": "Foundation step for valid filing mechanics and pleading readiness."
+    },
+    {
+      "section": "80",
+      "topic": "Notice before suit against Government",
+      "note": "Mandatory pre-suit compliance item in actions against state authorities."
+    },
+    {
+      "section": "94",
+      "topic": "Supplemental proceedings",
+      "note": "Supports interim relief planning including attachment and protective orders."
+    },
+    {
+      "section": "151",
+      "topic": "Inherent powers of court",
+      "note": "Fallback route where procedural gaps exist and justice-oriented directions are needed."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "code": "BNS",
+  "title": "Bharatiya Nyaya Sanhita, 2023",
+  "objective": "Offence mapping deck for charge framing, intent analysis, and punishment checkpoints.",
+  "updated": "Last reviewed: March 2026",
+  "sections": [
+    {
+      "section": "34",
+      "topic": "Acts done with common intention",
+      "note": "Use when two or more participants act toward a shared unlawful objective and liability needs joint framing."
+    },
+    {
+      "section": "74",
+      "topic": "Assault or criminal force to woman with intent to outrage modesty",
+      "note": "Relevant for complaint classification, survivor statement planning, and immediate protective action notes."
+    },
+    {
+      "section": "103",
+      "topic": "Punishment for murder",
+      "note": "Core charging section for fatal harm allegations and sentencing exposure discussions."
+    },
+    {
+      "section": "115",
+      "topic": "Voluntarily causing hurt",
+      "note": "Applied in injury-led disputes where medical evidence and witness consistency drive prosecution strength."
+    },
+    {
+      "section": "316",
+      "topic": "Criminal breach of trust",
+      "note": "Use in fiduciary or entrusted-property disputes where dishonest conversion is central."
+    },
+    {
+      "section": "351",
+      "topic": "Defamation",
+      "note": "Useful for reputation-focused conflicts involving publication, social media circulation, or public accusations."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "code": "BSA",
+  "title": "Bharatiya Sakshya Adhiniyam, 2023",
+  "objective": "Evidence reliability deck covering admissibility, document treatment, and burden distribution.",
+  "updated": "Last reviewed: March 2026",
+  "sections": [
+    {
+      "section": "3",
+      "topic": "Interpretation and definitions",
+      "note": "Baseline for determining relevance, facts in issue, and evidentiary vocabulary."
+    },
+    {
+      "section": "22",
+      "topic": "When oral admissions are relevant",
+      "note": "Used in admission disputes where statement context affects admissibility weight."
+    },
+    {
+      "section": "24",
+      "topic": "Confession caused by inducement, threat or promise",
+      "note": "Key safeguard section for testing voluntariness and evidentiary exclusion."
+    },
+    {
+      "section": "57",
+      "topic": "Facts judicially noticeable",
+      "note": "Supports efficiency by identifying facts that do not need strict proof."
+    },
+    {
+      "section": "62",
+      "topic": "Primary evidence",
+      "note": "Primary route for document-based proof strategy and authenticity challenges."
+    },
+    {
+      "section": "106",
+      "topic": "Burden of proving fact especially within knowledge",
+      "note": "Useful when one party alone can explain a key factual circumstance."
+    }
+  ]
+}

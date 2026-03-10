@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "LegalAssist AI",
-    "slug": "legal-assist-ai",
+    "name": "Gemini-Powered-Law-Guidance Public",
+    "slug": "gemini-powered-law-guidance-public",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "scheme": "legal-assist-ai",
+    "scheme": "gemini-powered-law-guidance-public",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -15,11 +15,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.bibek.legalassistai",
+      "bundleIdentifier": "com.bibek.geminipoweredlawguidancepublic",
       "buildNumber": "1.0.0"
     },
     "android": {
-      "package": "com.bibek.legalassistai",
+      "package": "com.bibek.geminipoweredlawguidancepublic",
       "permissions": [
         "android.permission.INTERNET",
         "android.permission.ACCESS_NETWORK_STATE",

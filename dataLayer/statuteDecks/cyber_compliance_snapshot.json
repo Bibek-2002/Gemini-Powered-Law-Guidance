@@ -1,0 +1,38 @@
+{
+  "code": "IT",
+  "title": "Information Technology Act, 2000",
+  "objective": "Digital evidence and cyber-offence deck for online harm, platform liability, and compliance requests.",
+  "updated": "Last reviewed: March 2026",
+  "sections": [
+    {
+      "section": "43",
+      "topic": "Penalty for damage to computer resources",
+      "note": "Civil-liability pathway for unauthorized access, data extraction, or disruption."
+    },
+    {
+      "section": "65",
+      "topic": "Tampering with computer source documents",
+      "note": "Applies where evidence suggests intentional alteration or deletion of source records."
+    },
+    {
+      "section": "66",
+      "topic": "Computer-related offences",
+      "note": "Criminal escalation from acts listed under section 43 when dishonest intent appears."
+    },
+    {
+      "section": "67",
+      "topic": "Publishing or transmitting obscene material in electronic form",
+      "note": "Used in online publication and intermediary takedown response scenarios."
+    },
+    {
+      "section": "69A",
+      "topic": "Directions for blocking public access to information",
+      "note": "Reference point for lawful blocking orders and platform compliance handling."
+    },
+    {
+      "section": "79",
+      "topic": "Exemption from liability of intermediary in certain cases",
+      "note": "Safe-harbour analysis for platforms that follow due diligence and notice handling."
+    }
+  ]
+}

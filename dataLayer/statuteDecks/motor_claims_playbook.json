@@ -1,0 +1,38 @@
+{
+  "code": "MVA",
+  "title": "Motor Vehicles Act, 1988",
+  "objective": "Road transport compliance and accident compensation deck for MACT-oriented workflows.",
+  "updated": "Last reviewed: March 2026",
+  "sections": [
+    {
+      "section": "3",
+      "topic": "Necessity for driving licence",
+      "note": "Used to validate licence status in prosecution and insurance disputes."
+    },
+    {
+      "section": "4",
+      "topic": "Age limits in connection with driving",
+      "note": "Applies where age eligibility affects offence framing or policy liability."
+    },
+    {
+      "section": "146",
+      "topic": "Requirement of insurance against third-party risk",
+      "note": "Primary checkpoint for compulsory coverage and compensation responsibility."
+    },
+    {
+      "section": "149",
+      "topic": "Duty of insurers to satisfy judgments and awards",
+      "note": "Critical in execution-stage strategy for award recovery."
+    },
+    {
+      "section": "166",
+      "topic": "Application for compensation",
+      "note": "Reference for claim petitions arising from death, injury, or property damage."
+    },
+    {
+      "section": "185",
+      "topic": "Driving by a drunken person or by a person under influence",
+      "note": "Supports offence analysis when intoxication evidence appears in accident files."
+    }
+  ]
+}

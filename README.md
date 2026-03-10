@@ -1,23 +1,24 @@
-# NyayaNexus Studio
+# Gemini-Powered-Law-Guidance Public
 
-NyayaNexus Studio is a React Native (Expo) mobile workspace for legal research support, case note management, statute quick-reference, and incident intake drafting.
+Gemini-Powered-Law-Guidance Public is a React Native (Expo) mobile application for legal workflow support. It combines AI-assisted legal analysis, a local case ledger, statute quick-reference decks, and incident reporting utilities in one mobile workspace.
 
-## What This App Focuses On
+## Product Goals
 
-- Fast legal query analysis with Gemini-backed structured output
-- Local case notebook (on-device storage)
-- Curated statute notebook with searchable section highlights
-- Incident report drafting with PDF export
-- Reference archive for legal source material
+- Provide fast first-pass legal issue analysis with structured AI output.
+- Keep case notes and saved responses available on-device for continuity.
+- Offer searchable statute decks for rapid section lookup during drafting.
+- Generate incident templates and printable reports from the same workflow.
+- Keep module boundaries clear so future expansion remains maintainable.
 
-## Product Modules
+## Feature Modules
 
-- `Command Center`: launchpad and workflow entry
-- `Research Desk`: AI analysis + draft-to-case save flow
-- `Docket Vault`: local case records and edits
-- `Statute Notebook`: curated act/section reference cards
-- `Incident Studio`: template export + final incident PDF generation
-- `Source Archive`: source browsing and quick access
+- `Command Center`: home launchpad and workflow routing.
+- `Research Desk`: Gemini query analysis and structured legal summary generation.
+- `Docket Vault`: save, review, and edit local case records.
+- `Statute Notebook`: tabbed searchable statute section reference decks.
+- `Incident Studio`: guided intake form and PDF export.
+- `Incident Template`: plain text incident template export.
+- `Source Archive`: browse reference documents.
 
 ## Tech Stack
 
@@ -26,57 +27,76 @@ NyayaNexus Studio is a React Native (Expo) mobile workspace for legal research s
 - TypeScript
 - React Navigation (native stack)
 - AsyncStorage
+- Axios
 
-## Project Structure
+## Directory Map
 
 ```text
-WorkspaceNavigator.tsx
+RootNavigator.tsx
 appRoutes.ts
-workflows/
-fragments/
+views/
+uiBlocks/
 integrations/
 domain/
+dataLayer/
 assets/
 images/
 ```
 
-## Environment Variables
+## Statute Data Layer (JSON)
 
-Create `.env` in the project root:
+The statute decks are maintained as JSON files in `dataLayer/statuteDecks/` and normalized through `dataLayer/statuteDecks/index.ts`.
+
+- `criminal_offence_digest.json`
+- `procedure_track_bnss.json`
+- `evidence_logic_bsa.json`
+- `civil_remedy_compass.json`
+- `motor_claims_playbook.json`
+- `cyber_compliance_snapshot.json`
+
+## App Identity
+
+- Display Name: `Gemini-Powered-Law-Guidance Public`
+- Expo Slug: `gemini-powered-law-guidance-public`
+- Scheme: `gemini-powered-law-guidance-public`
+- Android Package: `com.bibek.geminipoweredlawguidancepublic`
+- iOS Bundle ID: `com.bibek.geminipoweredlawguidancepublic`
+- npm Package Name: `gemini-powered-law-guidance-public`
+
+## Environment Setup
+
+Create a `.env` file in project root:
 
 ```bash
 EXPO_PUBLIC_GEMINI_API_KEY=your_api_key_here
 EXPO_PUBLIC_GEMINI_MODEL=gemini-3-flash-preview
 ```
 
-## Run Locally
+## Local Development
 
 ```bash
 npm install
 npm run start
 ```
 
-## Build and Submit
+## Native Run Commands
 
 ```bash
 npm run android
 npm run ios
+```
+
+## Build and Submit
+
+```bash
 npm run build:android
 npm run build:ios
 npm run submit:android
 npm run submit:ios
 ```
 
-## App Identity
+## Compliance and Usage Notes
 
-- Display Name: `NyayaNexus Studio`
-- Expo Slug: `nyayanexus-studio`
-- Scheme: `nyayanexus-studio`
-- Android Package: `com.bibek.nyayanexusstudio`
-- iOS Bundle ID: `com.bibek.nyayanexusstudio`
-
-## Data and Compliance Notes
-
-- Case records are stored on-device unless manually shared by the user.
-- AI output is assistive; verify legal conclusions before formal use.
-- The app is a workflow aid and not legal representation or legal advice.
+- AI output is assistive content and must be legally verified before final use.
+- Case records are stored locally unless a user explicitly exports or shares files.
+- This product supports legal workflows; it is not a law firm service or legal representation.

@@ -1,0 +1,38 @@
+{
+  "code": "BNSS",
+  "title": "Bharatiya Nagarik Suraksha Sanhita, 2023",
+  "objective": "Procedure workflow deck for FIR intake, investigation control, bail, and trial progression.",
+  "updated": "Last reviewed: March 2026",
+  "sections": [
+    {
+      "section": "173",
+      "topic": "Information relating to cognizable offence",
+      "note": "Primary checkpoint for FIR registration duties and refusal-risk analysis at intake."
+    },
+    {
+      "section": "193",
+      "topic": "Examination of witnesses by police",
+      "note": "Supports investigation planning and statement integrity review before filing."
+    },
+    {
+      "section": "232",
+      "topic": "Supply of police report and documents",
+      "note": "Tracks disclosure obligations to accused and helps avoid procedural challenge."
+    },
+    {
+      "section": "480",
+      "topic": "Bail in non-bailable offences",
+      "note": "Used to structure bail arguments around gravity, flight risk, and cooperation."
+    },
+    {
+      "section": "528",
+      "topic": "Appeal from convictions",
+      "note": "Reference route for post-judgment strategy and timeline-sensitive filings."
+    },
+    {
+      "section": "531",
+      "topic": "Powers of appellate court",
+      "note": "Important when deciding between sentence modification, remand, or acquittal arguments."
+    }
+  ]
+}
