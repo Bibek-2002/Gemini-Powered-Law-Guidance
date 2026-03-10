@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
-import VaultHeaderCard from '../fragments/DocketVault/VaultHeaderCard';
-import VaultCaseTile from '../fragments/DocketVault/VaultCaseTile';
-import VaultCaseSheet from '../fragments/DocketVault/VaultCaseSheet';
-import ScrollResetButton from '../fragments/DocketVault/ScrollResetButton';
-import VaultEmptyPanel from '../fragments/DocketVault/VaultEmptyPanel';
+import VaultHeaderCard from '../uiBlocks/DocketVault/VaultHeaderCard';
+import VaultCaseTile from '../uiBlocks/DocketVault/VaultCaseTile';
+import VaultCaseSheet from '../uiBlocks/DocketVault/VaultCaseSheet';
+import ScrollResetButton from '../uiBlocks/DocketVault/ScrollResetButton';
+import VaultEmptyPanel from '../uiBlocks/DocketVault/VaultEmptyPanel';
 import { CaseRecord } from '../domain/caseModels';
 import { loadCases, persistCases } from '../integrations/caseLedgerStore';
 

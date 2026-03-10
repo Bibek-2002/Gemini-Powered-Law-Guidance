@@ -16,7 +16,7 @@ const ContributorScreen: React.FC = () => {
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <LinearGradient colors={['#0A0F1D', '#17345E', '#0B4A6F']} style={styles.hero}>
         <Text style={styles.heroTag}>Contributors</Text>
-        <Text style={styles.heroTitle}>NyayaNexus Studio Team</Text>
+        <Text style={styles.heroTitle}>LegalAssist AI Team</Text>
         <Text style={styles.heroSubtitle}>
           Cross-functional collaboration behind product reliability and legal workflow execution.
         </Text>

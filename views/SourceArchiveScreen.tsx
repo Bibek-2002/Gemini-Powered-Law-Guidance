@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
-import LibraryHeaderCard from '../fragments/SourceArchive/LibraryHeaderCard';
-import LibrarySearchInput from '../fragments/SourceArchive/LibrarySearchInput';
-import DocumentTileCard from '../fragments/SourceArchive/DocumentTileCard';
-import LibraryEmptyPanel from '../fragments/SourceArchive/LibraryEmptyPanel';
+import LibraryHeaderCard from '../uiBlocks/SourceArchive/LibraryHeaderCard';
+import LibrarySearchInput from '../uiBlocks/SourceArchive/LibrarySearchInput';
+import DocumentTileCard from '../uiBlocks/SourceArchive/DocumentTileCard';
+import LibraryEmptyPanel from '../uiBlocks/SourceArchive/LibraryEmptyPanel';
 
 interface ReferenceDocument {
   id: number;

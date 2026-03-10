@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Voice from 'react-native-voice';
-import ConsoleHeaderCard from '../fragments/ResearchDesk/ConsoleHeaderCard';
-import QueryComposer from '../fragments/ResearchDesk/QueryComposer';
-import AnalysisPanel from '../fragments/ResearchDesk/AnalysisPanel';
-import ExecuteAnalysisButton from '../fragments/ResearchDesk/ExecuteAnalysisButton';
-import DraftReadyBanner from '../fragments/ResearchDesk/DraftReadyBanner';
-import DraftCaseSheet from '../fragments/ResearchDesk/DraftCaseSheet';
+import ConsoleHeaderCard from '../uiBlocks/ResearchDesk/ConsoleHeaderCard';
+import QueryComposer from '../uiBlocks/ResearchDesk/QueryComposer';
+import AnalysisPanel from '../uiBlocks/ResearchDesk/AnalysisPanel';
+import ExecuteAnalysisButton from '../uiBlocks/ResearchDesk/ExecuteAnalysisButton';
+import DraftReadyBanner from '../uiBlocks/ResearchDesk/DraftReadyBanner';
+import DraftCaseSheet from '../uiBlocks/ResearchDesk/DraftCaseSheet';
 import { fetchLegalAnalysis, LegalResponsePayload } from '../integrations/legalInsightGateway';
 import { DraftCaseRecord, CaseRecord } from '../domain/caseModels';
 import { loadCases, persistCases } from '../integrations/caseLedgerStore';

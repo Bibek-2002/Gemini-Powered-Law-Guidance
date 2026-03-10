@@ -3,21 +3,21 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View } from 'react-native';
 import { RootStackParamList, RootScreenName } from './appRoutes';
-import CommandCenterScreen from './workflows/CommandCenterScreen';
-import DocketVaultScreen from './workflows/DocketVaultScreen';
-import ResearchDeskScreen from './workflows/ResearchDeskScreen';
-import StatuteExplorerScreen from './workflows/StatuteExplorerScreen';
-import AppDownloadScreen from './workflows/AppDownloadScreen';
-import ContributorScreen from './workflows/ContributorScreen';
-import PrivacyOverviewScreen from './workflows/PrivacyOverviewScreen';
-import AccessibilityStandardsScreen from './workflows/AccessibilityStandardsScreen';
-import TermsGuideScreen from './workflows/TermsGuideScreen';
-import IncidentReportStudioScreen from './workflows/IncidentReportStudioScreen';
-import ToolboxScreen from './workflows/ToolboxScreen';
-import SourceArchiveScreen from './workflows/SourceArchiveScreen';
-import IncidentTemplateScreen from './workflows/IncidentTemplateScreen';
-import CapabilityGridScreen from './workflows/CapabilityGridScreen';
-import ProductPrinciplesScreen from './workflows/ProductPrinciplesScreen';
+import CommandCenterScreen from './views/CommandCenterScreen';
+import DocketVaultScreen from './views/DocketVaultScreen';
+import ResearchDeskScreen from './views/ResearchDeskScreen';
+import StatuteExplorerScreen from './views/StatuteExplorerScreen';
+import AppDownloadScreen from './views/AppDownloadScreen';
+import ContributorScreen from './views/ContributorScreen';
+import PrivacyOverviewScreen from './views/PrivacyOverviewScreen';
+import AccessibilityStandardsScreen from './views/AccessibilityStandardsScreen';
+import TermsGuideScreen from './views/TermsGuideScreen';
+import IncidentReportStudioScreen from './views/IncidentReportStudioScreen';
+import ToolboxScreen from './views/ToolboxScreen';
+import SourceArchiveScreen from './views/SourceArchiveScreen';
+import IncidentTemplateScreen from './views/IncidentTemplateScreen';
+import CapabilityGridScreen from './views/CapabilityGridScreen';
+import ProductPrinciplesScreen from './views/ProductPrinciplesScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -43,7 +43,7 @@ const routes: Array<{
   { name: 'NotFound', component: NotFoundScreen },
 ];
 
-function WorkspaceNavigator() {
+function RootNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -96,5 +96,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WorkspaceNavigator;
+export default RootNavigator;
 
